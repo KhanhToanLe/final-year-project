@@ -1,0 +1,19 @@
+{
+  "include": ["env.d.ts", "src/**/*", "src/**/**/*.vue"],
+  "exclude": ["src/**/__tests__/*"],
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "composite": true,
+    "baseUrl": ".",
+    "paths": {
+      "public/*": ["./public/*"],
+      "views/*": ["./src/views/*"],
+      "src/*": ["./src/*"],
+      "pages/*":["./src/components/pages/*"],
+      "node_module":["../node_modules/*"],
+      "common/*":["./src/common/*"]
+    },
+    "moduleResolution":"node",
+  }, 
+}
