@@ -21,6 +21,10 @@
   import { RouterLink } from 'vue-router';
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+  div{
+    img{
+      padding:120px;
+    }
+  }
 </style>
