@@ -15,7 +15,9 @@ export default defineConfig({
       'src': fileURLToPath(new URL('./src', import.meta.url)),
       'pages': fileURLToPath(new URL('./src/components/pages', import.meta.url)),
       'node_module':fileURLToPath(new URL('node_modules', import.meta.url)),
-      'common':fileURLToPath(new URL('./src/common', import.meta.url))
+      'common':fileURLToPath(new URL('./src/common', import.meta.url)),
+      'assets':fileURLToPath(new URL('./src/assets', import.meta.url)),
+      'base':fileURLToPath(new URL('./src/components/base', import.meta.url)),
     }
   }
 })

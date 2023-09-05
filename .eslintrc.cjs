@@ -11,12 +11,13 @@ module.exports = {
   },
   rules: {
     "no-unused-vars": "warn",
+    "no-duplicate-selectors":"off"
   },
   overrides: [
     {
         "files": ["*.js", "*.jsx","*.ts"],
         "rules": {
-            "@typescript-eslint/explicit-function-return-type": "off"
+            "@typescript-eslint/explicit-function-return-type": "off",
         }
     }
 ]
