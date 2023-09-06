@@ -14,8 +14,8 @@
       "node_module":["../node_modules/*"],
       "common/*":["./src/common/*"],
       "assets/*":["./src/assets/*"],
-      "base/*":["./src/components/base/*"]
-
+      "base/*":["./src/components/base/*"],
+      "@/*":["./*"]
     },
     "moduleResolution":"node",
   }, 
