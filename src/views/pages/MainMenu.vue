@@ -19,16 +19,16 @@
         <div />
       </div>
       <div class="ml-auto">
-        <div class="cursor-pointer">
+        <div class="menu-icon">
           <CIcon
             icon="Search"
-            class="w-12"
+            class="w-12 !text-lg text-center"
           />
         </div>
-        <div class="cursor-pointer">
+        <div class="menu-icon">
           <CIcon
             icon="Person"
-            class="w-12" 
+            class="w-12 !text-lg text-center"
           />
         </div>
       </div>
@@ -51,16 +51,16 @@
   margin-left:auto;
   margin-right:auto;
   @apply flex ;
-
 }
-
 .main-container{
   div{
     @apply flex items-center h-16
   }
 }
-
 .button-link{
   @apply text-lg text-black h-full p-3 hover:bg-slate-300 transition-all flex items-center justify-center
+}
+.menu-icon{
+  @apply flex justify-center items-center cursor-pointer
 }
 </style>

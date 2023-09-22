@@ -1,11 +1,24 @@
 
 <template>
   <div class="wrapper">
-    <img
-      src="https://akkogear.com.vn/wp-content/uploads/2023/04/5075B-Plus-goku-naruto-01.jpg"
-      alt=""
-      class="w-full"
+    <q-carousel
+      v-model="firstSlide"
+      animated
+      arrows
+      navigation
+      infinite
+      height="80vh"
+      :autoplay="2000"
+      transition-next="jump-left"
+      transition-prev="jump-right"
     >
+      <q-carousel-slide
+        v-for="(slide,index) in landingPageFirstSlideImages"
+        :key="index"
+        :name="index"
+        :img-src="slide.src"
+      />
+    </q-carousel>
     <div class="new-product">
       <div class="text-center">
         New Products
@@ -16,7 +29,9 @@
 
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
+import { landingPageFirstSlideImages } from 'utils/static-link';
+const firstSlide = ref(1);
 
 onMounted(() => {
   console.log('value');
@@ -35,4 +50,4 @@ onMounted(() => {
   margin-right: auto;
   /* @apply  */
 }
-</style>
+</style>src/utils/static-link.js
