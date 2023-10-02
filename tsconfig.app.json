@@ -16,6 +16,8 @@
       "assets/*":["./src/assets/*"],
       "base/*":["./src/components/base/*"],
       "utils/*":["./src/utils/*"],
+      "repository/*":["./src/api/repository/*"],
+
       "@/*":["./*"]
     },
     "moduleResolution":"node",
