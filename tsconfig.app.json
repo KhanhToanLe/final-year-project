@@ -1,25 +1,51 @@
 {
   // "include": ["env.d.ts", "src/**/*", "src/**/**/*.vue", "components.d.ts",],
-  "exclude": ["src/**/__tests__/*"],
+  "exclude": [
+    "src/**/__tests__/*"
+  ],
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
     "composite": true,
     "baseUrl": ".",
     "paths": {
-      "public/*": ["./public/*"],
-      "views/*": ["./src/views/*"],
-      "src/*": ["./src/*"],
-      "pages/*":["./src/components/pages/*"],
-      "node_module":["../node_modules/*"],
-      "common/*":["./src/common/*"],
-      "assets/*":["./src/assets/*"],
-      "base/*":["./src/components/base/*"],
-      "utils/*":["./src/utils/*"],
-      "repository/*":["./src/api/repository/*"],
-
-      "@/*":["./*"]
+      "public/*": [
+        "./public/*"
+      ],
+      "views/*": [
+        "./src/views/*"
+      ],
+      "src/*": [
+        "./src/*"
+      ],
+      "pages/*": [
+        "./src/components/pages/*"
+      ],
+      "node_module": [
+        "../node_modules/*"
+      ],
+      "common/*": [
+        "./src/common/*"
+      ],
+      "assets/*": [
+        "./src/assets/*"
+      ],
+      "base/*": [
+        "./src/components/base/*"
+      ],
+      "utils/*": [
+        "./src/utils/*"
+      ],
+      "repository/*": [
+        "./src/api/repository/*"
+      ],
+      "components/*": [
+        "./src/components/*"
+      ],
+      "@/*": [
+        "./*"
+      ]
     },
-    "moduleResolution":"node",
-  }, 
+    "moduleResolution": "node",
+  },
 }

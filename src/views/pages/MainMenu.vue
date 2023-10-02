@@ -38,29 +38,33 @@
 </template>
 
 <script setup lang="ts">
-  import { routes } from 'src/router/routes';
-  import { RouterLink } from 'vue-router';
+import { routes } from 'src/router/routes';
+import { RouterLink } from 'vue-router';
 </script>
 
 <style scoped lang="scss">
-.wrapper{
+.wrapper {
+  z-index: 1;
   @apply bg-white sticky top-0 left-0 right-0
 }
-.main-container{
-  max-width:1280px;
-  margin-left:auto;
-  margin-right:auto;
-  @apply flex ;
+
+.main-container {
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  @apply flex;
 }
-.main-container{
-  div{
+
+.main-container {
+  div {
     @apply flex items-center h-16
   }
 }
-.button-link{
+
+.button-link {
   @apply text-lg text-black h-full p-3 hover:bg-slate-300 transition-all flex items-center justify-center
 }
-.menu-icon{
+
+.menu-icon {
   @apply flex justify-center items-center cursor-pointer
-}
-</style>
+}</style>
