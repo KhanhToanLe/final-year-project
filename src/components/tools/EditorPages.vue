@@ -1,15 +1,10 @@
 <template>
-  <div class="wrapper p-[12px]">
+  <div class="wrapper">
     <div />
     <div>
-      <h5>Editor</h5>
       <div ref="editorElement" />
     </div>
   </div>
-  <!-- <span>{{ props.modelValue }}</span> -->
-  <!-- <q-button @click="saveValue"> -->
-  <!-- Save -->
-  <!-- </q-button> -->
 </template>
 
 <script setup lang="ts">
@@ -21,10 +16,14 @@ import "quill/dist/quill.bubble.css";
 import "quill/dist/quill.snow.css";
 import ResizeModule from "@botom/quill-resize-module";
 
-
 const props = defineProps({
-  modelValue:String
+  modelValue:String,
+  placeholder:{
+    type:String,
+    default: 'type in here'
+  }
 });
+
 const editor = ref();
 
 const emits = defineEmits(['update:modelValue']);
@@ -69,7 +68,7 @@ onMounted(()=>{
         locale: {
         },
     } },
-    placeholder: 'Compose an epic...',
+    placeholder: props.placeholder,
   });
   editor.value.root.innerHTML = props.modelValue;
   editor.value.on("text-change", function () {
@@ -77,6 +76,14 @@ onMounted(()=>{
   });
 })
 
+const clearText = () =>{
+  console.log('go here');
+  editor.value.root.innerHTML = "";
+}
+
+defineExpose({
+  clearText
+})
 // watch(
 //   () => props.modelValue,
 //   (newContent) => {

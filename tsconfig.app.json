@@ -1,5 +1,6 @@
 {
-  // "include": ["env.d.ts", "src/**/*", "src/**/**/*.vue", "components.d.ts",],
+  "include": ["env.d.ts", "src/**/*.vue", "src/**/**/*.vue", "components.d.ts","src/**/*.*"],
+
   "exclude": [
     "src/**/__tests__/*"
   ],
@@ -41,6 +42,18 @@
       ],
       "components/*": [
         "./src/components/*"
+      ],
+      "stores/*": [
+        "./src/stores/*"
+      ],
+      "subpage/*":[
+        "./src/components/subpage/*"
+      ],
+      "subcomponent/*":[
+        "./src/components/subcomponent/*"
+      ],
+      "tools/*":[
+        "./src/components/tools/*"
       ],
       "@/*": [
         "./*"

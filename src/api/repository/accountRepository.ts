@@ -9,6 +9,14 @@ class AccountRepository extends BaseRepository {
     return this.client.post('/sign-up',user);
   }
 
+  verifyAccount(token){
+    return this.client.get(`/verify-account/${token}`);
+  }
+
+  login(user){
+    return this.client.post("/login",user);
+  }
+
 }
 
 export default new AccountRepository();

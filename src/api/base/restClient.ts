@@ -1,6 +1,7 @@
 
 import Axios, { AxiosInstance } from 'axios';
-
+import { useDialogStore } from 'stores/dialog';
+import { useCookies} from 'vue3-cookies';
 
 function mergeAxiosConfig(data, config) {
   const axiosConfig = Object.assign(config || {}, {
@@ -42,10 +43,12 @@ export default class RestClient {
 
   onRequest = async (config) => {
     // const authStore = useAuthStore();
-    // set token from store to header
+    const {cookies}=  useCookies()
+
     if (config.headers) {
-      // config.headers.Authorization = `Bearer ${authStore.token}`;
-      // config.headers.RequestHeaderDto = this.createCustomHeader();
+      if(cookies.get('token')  !== null){
+        config.headers.Authorization = `Bearer ${cookies.get('token').token}`;
+      }
     }
     // do something here before request
     return config;
@@ -89,10 +92,12 @@ export default class RestClient {
   }
 
   request(method, url, data, config) {
-    // const loading = useLoadingStore();
+    const dialog = useDialogStore();
     return new Promise((resolve, reject) => {
       // show loading
-      // loading.show();
+      dialog.show({
+        type:'loading'
+      });
       const axiosConfig = Object.assign(config, {
         url: `${this.servicePath}${url}`,
         method,
@@ -114,10 +119,7 @@ export default class RestClient {
           this.#processError(error, reject);
         })
         .finally(() => {
-          // hide if not multi loading
-          // if (!loading.isMultiLoading) {
-          //   loading.hide();
-          // }
+          dialog.hideLoading();
         });
     });
   }

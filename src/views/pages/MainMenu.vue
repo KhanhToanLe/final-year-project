@@ -2,10 +2,10 @@
   <div class="wrapper">
     <div class="main-container">
       <div class="main-logo">
-        <img
+        <!-- <img
           src="/images/logo.png"
           alt="logo image"
-        >
+        > -->
       </div>
       <div class="pl-4">
         <RouterLink
@@ -14,7 +14,9 @@
           :to="route.path"
           class="button-link"
         >
-          {{ route.name }}
+          <template v-if="route.meta.show">
+            {{ route.name }}
+          </template>
         </RouterLink>
         <div />
       </div>
@@ -29,8 +31,50 @@
           <CIcon
             icon="Person"
             class="w-12 !text-lg text-center"
+            @click="dropdown = !dropdown"
           />
         </div>
+        <q-btn-dropdown
+          v-model="dropdown"
+          color="primary"
+          class="dropdown"
+        >
+          <q-list>
+            <q-item
+              v-close-popup
+              clickable
+              @click="informationClickHandler"
+            >
+              <q-item-section>
+                <q-item-label>
+                  <div class="flex">
+                    <CIcon icon="Info" />
+                    <span class="w-[120px] pl-2 ">
+                      Information
+                    </span>
+                  </div>
+                </q-item-label>
+              </q-item-section>
+            </q-item>
+            
+            <q-item
+              v-close-popup
+              clickable
+              @click="signOutClickHandler"
+            >
+              <q-item-section>
+                <q-item-label>
+                  <div class="flex">
+                    <CIcon icon="Logout" />
+                    <span class="w-[120px] pl-2">
+                      Sign Out
+                    </span>
+                  </div>
+                </q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
       </div>
       <div />
     </div>
@@ -38,8 +82,28 @@
 </template>
 
 <script setup lang="ts">
-import { routes } from 'src/router/routes';
-import { RouterLink } from 'vue-router';
+import { ref } from 'vue';
+import { useRouter, RouterLink } from 'vue-router';
+import { useDialogStore } from 'src/stores/dialog';
+import { useCookies} from 'vue3-cookies';
+const router = useRouter();
+const routes = router.getRoutes();
+const dialog = useDialogStore();
+const {cookies} = useCookies();
+
+const dropdown = ref(false);
+const informationClickHandler = () =>{
+  dialog.show({
+    type:"message",
+    header:"Attention",
+    message:"This Module Is Currently Under Development"
+  })
+}
+
+const signOutClickHandler = () =>{
+  cookies.remove("token");
+  router.push("/login");
+}
 </script>
 
 <style scoped lang="scss">
@@ -67,4 +131,14 @@ import { RouterLink } from 'vue-router';
 
 .menu-icon {
   @apply flex justify-center items-center cursor-pointer
-}</style>
+}
+
+.dropdown{
+  width: 1px;
+  height:1px;
+  padding:0;
+  margin:0;
+  visibility: hidden;
+
+}
+</style>

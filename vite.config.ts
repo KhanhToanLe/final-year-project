@@ -23,6 +23,10 @@ export default ({ mode }) => {
         'utils': fileURLToPath(new URL('./src/utils', import.meta.url)),
         "repository": fileURLToPath(new URL('./src/api/repository', import.meta.url)),
         'components': fileURLToPath(new URL('./src/components', import.meta.url)),
+        'stores': fileURLToPath(new URL('./src/stores', import.meta.url)),
+        'subpage': fileURLToPath(new URL('./src/components/subpage', import.meta.url)),
+        'tools': fileURLToPath(new URL('./src/components/tools', import.meta.url)),
+        'subcomponent': fileURLToPath(new URL('./src/components/subcomponent', import.meta.url)),
       }
     },
   })

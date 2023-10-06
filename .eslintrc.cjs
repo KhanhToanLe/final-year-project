@@ -15,7 +15,8 @@ module.exports = {
     "no-duplicate-selectors": "off",
     "vue/require-v-for-key": "warn",
     "vue/require-valid-default-prop": "warn",
-    "vue/valid-v-for": "off"
+    "vue/valid-v-for": "off",
+    "vue/html-quotes":"off"
   },
   overrides: [
     {

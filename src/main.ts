@@ -7,7 +7,7 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 import CIcon from 'base/CIcon.vue';
-import { Quasar } from 'quasar'
+import { Quasar} from 'quasar'
 import quasarUserOptions from './quasar-user-options'
 
 

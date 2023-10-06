@@ -11,186 +11,251 @@
     </div>
     <div class="bg-[#f7f7f7] w-full flex justify-center items-center  relative">
       <div class="h-fit w-[40%]">
-        <transition>
-          <div>
-            <div
-              :class="{'hidden':tabNumber!=0}"
-              class="tab-transition"
-            >
-              <div class="text-[36px] font-bold text-center text-[#8071b3]">
-                Sign In
-              </div>
-              <span class="text-gray-400 pb-12 block text-center">Already have an account? <span class="text-[#515151] underline cursor-pointer">login</span></span>
-              <div>
-                <q-input
-                  v-model="user.email"
-                  outlined
-                  type="email"
-                  label="Email address"
-                  class="py-2"
-                  :rules="[ 
-                    (val, rules) => rules.email(val) || 'Please enter a valid email address',
-                    val=>val.length <= 50||'Please use maximum 50 characters' 
-                  ]"
-                />
-                <q-input
-                  v-model="user.password"
-                  outlined
-                  :type="isPasswordShow ? 'password' : 'text'"
-                  label="Password"
-                  class="py-2"
-                  :rules="[ 
-                    val=>val.length <= 25||'Please use maximum 50 characters' 
-                  ]"
-                >
-                  <template #append>
-                    <q-icon
-                      :name="isPasswordShow ? 'visibility_off' : 'visibility'"
-                      class="cursor-pointer"
-                      @click="isPasswordShow = !isPasswordShow"
-                    />
-                  </template>
-                </q-input>
-              </div>
-              <div class="my-4 ">
-                <q-btn
-                  class="!bg-[#8071b3] text-white !w-full !py-3"
-                  label="Create"
-                  @click="validateLoginInfo"
-                />
-                <span class="text-gray-400 text-center block mt-1">By joining, you agree to the <span class="underline text-[#515151] cursor-pointer">Terms</span> and <span class="underline text-[#515151] cursor-pointer">Privacy Policy</span></span>
-              </div>
+        <div v-if="!isLogin">
+          <div
+            :class="{'hidden':tabNumber!=0}"
+            class="tab-transition"
+          >
+            <div class="text-[36px] font-bold text-center text-[#8071b3]">
+              Sign In
             </div>
-            <div
-              :class="{'hidden':tabNumber!=1}"
-              class="tab-transition"
-            >
-              <div class="absolute top-0 left-0 ml-3 mt-3">
-                <CIcon
-                  icon="Arrow Back"
-                  class="w-24 !text-[30px] text-center text-[#8071b3]"
-                  @click="tabNumber--"
-                />
-              </div>
-              <div class="text-[24px] font-bold text-center text-[#8071b3]">
-                Complete the following steps to configure your profile
-              </div>
-              <div>
-                <input
-                  ref="avatarInput"
-                  type="file"
-                  name="avatar"
-                  class="!invisible !h-[1px]"
-                  accept="image/*"
-                  @change="uploadAvatarFileHandler($event)"
-                >
-                <div class="flex justify-center items-center">
-                  <q-btn
-                    round
-                    @click="inputAvatarFileHandler"
-                  >
-                    <q-avatar size="56px">
-                      <img :src="user.avatar == ''? 'images/login/default-avatar.jpg' : user.avatar">
-                    </q-avatar>
-                  </q-btn>
-                </div>
-              </div>
-              <div class="mt-4">
-                <q-input
-                  v-model="user.name"
-                  outlined
-                  label="Name"
-                  class="py-2"
-                  :rules="[val=>val.length > 5 || 'make sure that your name is not shorter 5 characters']"
-                />
-                <q-input
-                  v-model="user.location"
-                  outlined
-                  label="Address"
-                  class="py-2"
-                  :rules="[val=>val.length > 5 || 'make sure that your location is not shorter 5 characters']"
-                />
-                <q-input
-                  v-model="user.phone"
-                  outlined
-                  type="number"
-                  label="Phone Number"
-                  class="py-2"
-                  :rules="[val=>validatePhoneNumber(val) || 'invalid phone number, please type again']"
-                />
-              </div>
+            <span class="text-gray-400 pb-12 block text-center">Already have an account? <button
+              class="text-[#515151] underline cursor-pointer"
+              @click="switchPage"
+            >login</button></span>
+            <div>
+              <q-input
+                v-model="user.email"
+                outlined
+                type="email"
+                label="Email address"
+                class="py-2"
+                :rules="[ 
+                  (val, rules) => rules.email(val) || 'Please enter a valid email address',
+                  val=>val.length <= 50||'Please use maximum 50 characters' 
+                ]"
+              />
+              <q-input
+                v-model="user.password"
+                outlined
+                :type="isPasswordShow ? 'password' : 'text'"
+                label="Password"
+                class="py-2"
+                :rules="[ 
+                  val=>val.length <= 25||'Please use maximum 50 characters' 
+                ]"
+              >
+                <template #append>
+                  <q-icon
+                    :name="isPasswordShow ? 'visibility_off' : 'visibility'"
+                    class="cursor-pointer"
+                    @click="isPasswordShow = !isPasswordShow"
+                  />
+                </template>
+              </q-input>
+            </div>
+            <div class="my-4 ">
               <q-btn
                 class="!bg-[#8071b3] text-white !w-full !py-3"
-                label="Continue"
-                @click="validateLoginMoreInfo"
+                label="Create"
+                @click="validateLoginInfo"
               />
-            </div>
-            <div :class="{'hidden':tabNumber!=2}">
-              <div class="absolute top-0 left-0 ml-3 mt-3">
-                <CIcon
-                  icon="Arrow Back"
-                  class="w-24 !text-[30px] text-center text-[#8071b3]"
-                  @click="tabNumber--"
-                />
-              </div>
-              <div class="text-[36px] font-bold text-center text-[#8071b3]">
-                Payment Method
-              </div>
-              <div class="mt-4">
-                <q-input
-                  v-model="user.cardHolder"
-                  outlined
-                  label="card holder"
-                  class="py-2"
-                />
-                <q-input
-                  v-model="user.cardNumber"
-                  outlined
-                  label="card number"
-                  class="py-2"
-                >
-                  <template #append>
-                    <q-avatar>
-                      <img src="images/login/mc-logo.svg">
-                    </q-avatar>
-                  </template>
-                </q-input>
-                <div class="flex !flex-nowrap">
-                  <q-input
-                    v-model="user.expireDate"
-                    outlined
-                    type="date"
-                    label="expired date"
-                    class="py-2 mr-[auto]"
-                  />
-                  <q-input
-                    v-model="user.CVC"
-                    outlined
-                    label="CVC"
-                    class="py-2"
-                  />
-                </div>
-              </div>
-              <q-btn
-                class="!bg-[#8071b3] text-white !w-full !py-3"
-                label="Sign In"
-                @click="createAccountClickHandler"
-              />
+              <span class="text-gray-400 text-center block mt-1">By joining, you agree to the <span class="underline text-[#515151] cursor-pointer">Terms</span> and <span class="underline text-[#515151] cursor-pointer">Privacy Policy</span></span>
             </div>
           </div>
-        </transition>
+          <div
+            :class="{'hidden':tabNumber!=1}"
+            class="tab-transition"
+          >
+            <div class="absolute top-0 left-0 ml-3 mt-3">
+              <CIcon
+                icon="Arrow Back"
+                class="w-24 !text-[30px] text-center text-[#8071b3]"
+                @click="tabNumber--"
+              />
+            </div>
+            <div class="text-[24px] font-bold text-center text-[#8071b3]">
+              Complete the following steps to configure your profile
+            </div>
+            <div>
+              <input
+                ref="avatarInput"
+                type="file"
+                name="avatar"
+                class="!invisible !h-[1px]"
+                accept="image/*"
+                @change="uploadAvatarFileHandler($event)"
+              >
+              <div class="flex justify-center items-center">
+                <q-btn
+                  round
+                  @click="inputAvatarFileHandler"
+                >
+                  <q-avatar size="56px">
+                    <img :src="user.avatar == ''? 'images/login/default-avatar.jpg' : user.avatar">
+                  </q-avatar>
+                </q-btn>
+              </div>
+            </div>
+            <div class="mt-4">
+              <q-input
+                v-model="user.name"
+                outlined
+                label="Name"
+                class="py-2"
+                :rules="[val=>val.length > 5 || 'make sure that your name is not shorter 5 characters']"
+              />
+              <q-input
+                v-model="user.location"
+                outlined
+                label="Address"
+                class="py-2"
+                :rules="[val=>val.length > 5 || 'make sure that your location is not shorter 5 characters']"
+              />
+              <q-input
+                v-model="user.phone"
+                outlined
+                type="number"
+                label="Phone Number"
+                class="py-2"
+                :rules="[val=>validatePhoneNumber(val) || 'invalid phone number, please type again']"
+              />
+            </div>
+            <q-btn
+              class="!bg-[#8071b3] text-white !w-full !py-3"
+              label="Continue"
+              @click="validateLoginMoreInfo"
+            />
+          </div>
+          <div :class="{'hidden':tabNumber!=2}">
+            <div class="absolute top-0 left-0 ml-3 mt-3">
+              <CIcon
+                icon="Arrow Back"
+                class="w-24 !text-[30px] text-center text-[#8071b3]"
+                @click="tabNumber--"
+              />
+            </div>
+            <div class="text-[36px] font-bold text-center text-[#8071b3]">
+              Payment Method
+            </div>
+            <div class="mt-4">
+              <q-input
+                v-model="user.cardHolder"
+                outlined
+                label="card holder"
+                class="py-2"
+                :rules="[val=>val.length > 5 || 'card holder at least contains 5 characters']"
+              />
+              <q-input
+                v-model="user.cardNumber"
+                outlined
+                label="card number"
+                class="py-2"
+                :rules="[val=>val.length > 5 || 'card number at least contains 5 characters']"
+              >
+                <template #append>
+                  <q-avatar>
+                    <img src="images/login/mc-logo.svg">
+                  </q-avatar>
+                </template>
+              </q-input>
+              <div class="flex !flex-nowrap">
+                <q-input
+                  v-model="user.expireDate"
+                  outlined
+                  type="date"
+                  label="expired date"
+                  class="py-2 pr-[12px] w-full"
+                  :rules='[val => val != "" || "Make sure that you input your card expire date"]'
+                />
+                <q-input
+                  v-model="user.CVC"
+                  outlined
+                  label="CVC"
+                  class="py-2 "
+                  :rules='[val => val != "" || "Make sure that you input CVC"]'
+                />
+              </div>
+            </div>
+            <q-btn
+              class="!bg-[#8071b3] text-white !w-full !py-3"
+              label="Sign In"
+              @click="createAccountClickHandler"
+            />
+          </div>
+        </div>
+        <div v-else>
+          <div
+            class="tab-transition"
+          >
+            <div class="text-[36px] font-bold text-center text-[#8071b3]">
+              Log In
+            </div>
+            <span class="text-gray-400 pb-12 block text-center">don't have an account? <button
+              class="text-[#515151] underline cursor-pointer"
+              @click="switchPage"
+            >sign up</button></span>
+            <div>
+              <q-input
+                v-model="user.email"
+                outlined
+                type="email"
+                label="Email address"
+                class="py-2"
+                :rules="[ 
+                  (val, rules) => rules.email(val) || 'Please enter a valid email address',
+                  val=>val.length <= 50||'Please use maximum 50 characters' 
+                ]"
+              />
+              <q-input
+                v-model="user.password"
+                outlined
+                :type="isPasswordShow ? 'password' : 'text'"
+                label="Password"
+                class="py-2"
+                :rules="[ 
+                  val=>val.length <= 25||'Please use maximum 50 characters' 
+                ]"
+              >
+                <template #append>
+                  <q-icon
+                    :name="isPasswordShow ? 'visibility_off' : 'visibility'"
+                    class="cursor-pointer"
+                    @click="isPasswordShow = !isPasswordShow"
+                  />
+                </template>
+              </q-input>
+            </div>
+            <div class="my-4 ">
+              <q-btn
+                class="!bg-[#8071b3] text-white !w-full !py-3"
+                label="Login"
+                @click="loginClickHandler"
+              />
+              <span class="text-gray-400 text-center block mt-1">By joining, you agree to the <span class="underline text-[#515151] cursor-pointer">Terms</span> and <span class="underline text-[#515151] cursor-pointer">Privacy Policy</span></span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
-import accountRepository from 'repository/accountRepository';
-import { STATUS_CODES } from 'http';
-import { STATUS_CODE } from 'src/common/StatusCode';
+  import { inject, onMounted, ref } from 'vue';
+  import accountRepository from 'repository/accountRepository';
+  import { STATUS_CODE } from 'src/common/StatusCode';
+  import {useDialogStore} from 'stores/dialog';
+  import { DIALOG_TYPE } from 'src/common/enum';
+  import { useRoute, useRouter } from 'vue-router';
+  import { useCookies } from "vue3-cookies";
 
+  const route = useRoute();
+  const router = useRouter();
+  const dialog = useDialogStore();
+  const {cookies} = useCookies();
 
+  const isLogin = ref(false);
   const tabNumber = ref(0);
   const isPasswordShow = ref(true);
   const user =  ref({
@@ -201,12 +266,29 @@ import { STATUS_CODE } from 'src/common/StatusCode';
     location:"",
     cardHolder:"",
     cardNumber:"",
-    expireDate:new Date() as any,
+    expireDate:"",
     CVC:"",
     avatar:""
   });
+  
 
   const avatarInput = ref();
+
+  const switchPage = () =>{
+    isLogin.value = !isLogin.value;
+    user.value =  {
+      name:"",
+      email:"",
+      password:"",
+      phone:"",
+      location:"",
+      cardHolder:"",
+      cardNumber:"",
+      expireDate:"",
+      CVC:"",
+      avatar:""
+    };
+  }
 
   const toBase64 = file => new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -224,11 +306,12 @@ import { STATUS_CODE } from 'src/common/StatusCode';
     user.value.avatar = await toBase64(avatarFile) as string;
   }
 
-  const validateEmail= (email)=> {
+  const validateEmail = (email)=> {
     var re = /\S+@\S+\.\S+/;
     return re.test(email);
   }
-  const validatePhoneNumber =(phone)=>{
+
+  const validatePhoneNumber = (phone)=>{
     const regexPhoneNumber = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g;
     return phone.match(regexPhoneNumber) ? true : false;
   }
@@ -253,18 +336,77 @@ import { STATUS_CODE } from 'src/common/StatusCode';
       PhoneNumber: user.value.phone,
       Address: user.value.location,
       CardHolder: user.value.cardHolder,
+      CardNumber:user.value.cardNumber,
       CardExpiredDate: user.value.expireDate ,
       CVC: user.value.CVC,
     }
+
     const result = await accountRepository.signUp(account)
     if(result.code === STATUS_CODE.CONFLICT ){
-      alert("already have account");
+      dialog.show({
+        type:DIALOG_TYPE.MESSAGE,
+        header:'Error',
+        message:"Your email and phone number has been signed up",
+      })
     }
     else{
-      alert("success");
+      dialog.show({
+        type:DIALOG_TYPE.MESSAGE,
+        header:"Success",
+        message:"Checking your email to confirm sign up"
+      })
     }
   }
+  const loginClickHandler = async() =>{
+    const result = await accountRepository.login({
+      Email:user.value.email,
+      password:user.value.password
+    });
+    if(result.code === STATUS_CODE.BAD_REQUEST){
+      dialog.show({
+        type:"message",
+        header:"Error",
+        message: "Your email or password is incorrect"
+      })
+    }
+    else if(result.code === STATUS_CODE.UNAUTHOR){
+      dialog.show({
+        type:"message",
+        header:"Error",
+        message: "Your account hasn't been verify, check out your email"
+      })
+    }
+    else if(result.code === STATUS_CODE.OK){
+      dialog.show({
+        type:"message",
+        header:"Success",
+        message: "Login successfully complete",
+      });
+      const payload = result.payload;
+      cookies.set("token",payload);
+      router.push('/');
+    }
+    isLogin.value = true;
+      user.value =  {
+      name:"",
+      email:"",
+      password:"",
+      phone:"",
+      location:"",
+      cardHolder:"",
+      cardNumber:"",
+      expireDate:"",
+      CVC:"",
+      avatar:""
+    };
+  }
+
   onMounted(()=>{
+    if(route.name == "Login"){
+      isLogin.value = true;
+    }else{
+      isLogin.value = false;
+    }
   })
 </script>
 
