@@ -1,104 +1,55 @@
-
 <template>
-  <div class="wrapper">
-    <SlideShow
-      v-model="firstSlide"
-      :items="landingPageFirstSlideImages"
-      :autoplay="false"
-      class="!h-[auto]"
-    />
-    <div class="block-product">
-      <div class="text-center uppercase text-lg font-bold py-[24px]">
-        New Products
-      </div>
-      <div class="flex mx-[-4px]">
-        <ProductItem
-          v-for="(product, index) in newProductList"
-          :test="index"
-          v-bind="product"
-          class="w-[20%] h-[300px]"
-        />
-      </div>
+  <div class="flex-auto">
+    <div class="products grid grid-cols-4 gap-1">
+      <ProductItem
+        v-for="(product, index) in productList"
+        :key="index"
+        v-bind="product"
+      />
     </div>
-    <div class="block-product !p-0 mt-[4px]">
-      <div class=" text-lg font-bold flex border border-dotted border">
-        <div class="mr-[auto] ">
-          <span class=" text-white bg-[#8071b3] h-full block p-2 uppercase">
-            Keyboard
-          </span>
-        </div>
-        <a
-          href="/"
-          class="ml-[auto] h-full p-2 text-black italic text-[14px] underline cursor-pointer select-none"
-        >
-          more detail
-        </a>
+    <div class="flex justify-center">
+      <div class="bg-[#8071b3] text-white round-page-button">
+        1
       </div>
-      <div class="mx-[-4px]">
-        <SlideShow
-          v-model="keyboardSlide"
-          :items="newProductList"
-          :mode="SLIDE_SHOW_MODE.CONTAIN_SLOT"
-          height="400"
-          :autoplay="4000"
-          :arrows="true"
-          :navigation="false"
-          control-color="black"
-          class="w-full"
-        >
-          <q-carousel-slide
-            v-for="slideIndex in Math.roundNumber(newProductList.length / 5)"
-            :name="slideIndex"
-            class="column no-wrap flex-center w-full h-full !p-0"
-          >
-            <div class="flex">
-              <ProductItem
-                v-for="productItem in 5"
-                v-bind="newProductList[productItem + ((slideIndex - 1) * 5) - 1]"
-                class="w-[20%]"
-              />
-            </div>
-          </q-carousel-slide>
-        </SlideShow>
+      <div class="white tex-white border round-page-button">
+        2
       </div>
-    </div>
-    <div class="block-product">
-      <div class="text-center uppercase text-lg font-bold py-[24px]">
-        Category
+      <div class="white tex-white border round-page-button">
+        3
       </div>
-      <!-- <SlideShow
-        v-model="keyboardSlide"
-        :items="newProductList"
-        :mode="SLIDE_SHOW_MODE.CONTAIN_SLOT"
-        height="400"
-        :autoplay="4000"
-        :arrows="true"
-        :navigation="false"
-        control-color="black"
-        class="w-full"
-      >
-      <q-carousel-slide v-for="" :name="">
-
-      </q-carousel-slide>
-    </SlideShow> -->
+      <div class="white tex-white border round-page-button">
+        4
+      </div>
+      <div class="white tex-white border round-page-button">
+        5
+      </div>
+      <div class="white tex-white border round-page-button">
+        6
+      </div>
     </div>
   </div>
 </template>
-<script setup lang="ts">
-
-import { onMounted, ref } from 'vue';
-import { landingPageFirstSlideImages } from 'utils/static-link';
-import SlideShow from 'components/base/SlideShow.vue';
+<script setup lang='ts'>
+import SideMenu from 'views/pages/SideMenu.vue';
 import ProductItem from 'components/common/ProductItem.vue';
-import { SLIDE_SHOW_MODE } from 'src/common/enum';
-import * as Math from 'common/math';
+import FooterInfo from 'subpage/FooterInfo.vue';
+import { ref } from 'vue';
 
-const firstSlide = ref(0);
-const keyboardSlide = ref(1);
-onMounted(() => {
+const props = defineProps({
+  BreadCrumb: {
+    require: true,
+    type: String,
+    default: "TRANG CHỦ / BÀN PHÍM"
+  }
 });
 
-const newProductList = ref([
+const optionOrder = [
+  'newest to oldest', 'oldest to newest'
+]
+
+const orderBy = ref(optionOrder[0]);
+
+const productList = ref([
   {
     src: 'https://akkogear.com.vn/wp-content/uploads/2023/08/kit-ban-phim-co-monsgeek-m6-qmk-10-247x296.jpg',
     name: 'Kit bàn phím cơ MonsGeek M6 QMK (Full Nhôm – Mạch xuôi – QMK / VIA – PCB Stab)',
@@ -167,21 +118,9 @@ const newProductList = ref([
   }
 ])
 
-// const categoryList = ref([
-//   {
-//     c
-
-//   }
-// ])
-
 </script>
-
-<style scoped>
+<style scoped lang='scss'>
 .wrapper {
-  width: 100%;
-}
-
-.block-product {
   max-width: 1280px;
   margin-left: auto;
   margin-right: auto;
@@ -190,4 +129,16 @@ const newProductList = ref([
   color: var(--main-color);
   /* @apply  */
 }
-</style>src/utils/static-link.js
+
+.products {
+  @apply w-full mt-[-.25rem]
+}
+
+.flex-container {
+  flex: 1 auto;
+}
+
+.round-page-button {
+  @apply rounded-full w-8 h-8 flex items-center justify-center m-1
+}
+</style>

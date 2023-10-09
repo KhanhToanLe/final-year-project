@@ -24,7 +24,7 @@
                 v-ripple
                 clickable
                 :active="menuItem.icon == selectedMenu.icon"
-                :class="[{'!text-[#8071b3]': menuItem.icon == selectedMenu.icon} ]"
+                :class="[{ '!text-[#8071b3]': menuItem.icon == selectedMenu.icon }]"
                 @click="changeTabMenu(menuItem.icon)"
               >
                 <q-item-section avatar>
@@ -70,9 +70,9 @@ const menuList = [
   },
   {
     icon: "category",
-    label:"Product",
-    separator:false,
-    component:AdminProduct
+    label: "Product",
+    separator: false,
+    component: AdminProduct
   },
   {
     icon: 'delete',
@@ -105,11 +105,9 @@ const menuList = [
 const selectedMenu = ref(menuList[0]);
 
 
-const changeTabMenu = (icon) =>{
+const changeTabMenu = (icon) => {
   selectedMenu.value = menuList.find(x => x.icon == icon);
 }
 </script>
 
-<style scoped scss>
-
-</style>
+<style scoped scss></style>

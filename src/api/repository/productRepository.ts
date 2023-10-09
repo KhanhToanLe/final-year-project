@@ -5,15 +5,15 @@ class ProductRepository extends BaseRepository {
     super('product');
   }
 
-  add(product){
-    return this.client.post('/add',product);
+  add(product) {
+    return this.client.post('/add', product);
   }
 
-  get(){
-    
+  get() {
+    return this.client.get("/");
   }
 
-  
+
 }
 
 export default new ProductRepository();

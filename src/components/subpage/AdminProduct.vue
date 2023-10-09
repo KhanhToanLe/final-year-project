@@ -10,27 +10,55 @@
         <q-table
           flat
           bordered
-          :rows="rows"
           :columns="columns"
+          :rows="rows"
           row-key="name"
-        />
+          class="!h-full"
+        >
+          <template #header="props">
+            <q-tr :props="props">
+              <q-th v-for="col in props.cols">
+                {{ col.label }}
+              </q-th>
+            </q-tr>
+          </template>
+          <template #body="props">
+            <q-tr :props="props">
+              <q-td v-for="col in props.cols">
+                {{ col.value }}
+              </q-td>
+            </q-tr>
+          </template>
+        </q-table>
       </div>
     </div>
-    <AddProduct v-if="isAddProduct" />
+    <AddProduct
+      v-if="isAddProduct"
+      @changeToList="backToListHandler"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 const isShowTable = ref(true);
 const isAddProduct = ref(false);
 import AddProduct from 'subcomponent/AddProduct.vue';
+import productRepository from 'api/productRepository';
 
-const addProductClickHandler = () =>{
+
+
+const addProductClickHandler = () => {
   isAddProduct.value = true;
   isShowTable.value = false;
-} 
+}
+
+const backToListHandler = () => {
+  isAddProduct.value = false;
+  isShowTable.value = true;
+}
+
 
 const columns = [
   {
@@ -154,8 +182,14 @@ const rows = [
   }
 ]
 
+const getAllProduct = async () => {
+  const result = await productRepository.get();
+  console.log(result);
+}
+
+onMounted(() => {
+  getAllProduct();
+})
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -1,25 +1,17 @@
 <template>
-  <!-- <div>
-    <MainMenu v-if="route.currentRoute.value.meta.showMainMenu" />
-    <div class="flex">
-      <SideMenu />
-      <RouterView />
-    </div>
-  </div> -->
-  <SSVSport />
-  <!-- <TestTransition /> -->
+  <MainMenu v-if="route.currentRoute.value.meta.showMainMenu" />
+  <RouterView />
 </template>
 <script setup lang="ts">
+import AdminPage from 'src/components/pages/AdminPage.vue';
 import MainMenu from 'views/pages/MainMenu.vue';
-import LoginPage from 'src/components/pages/LoginPage.vue';
 import SideMenu from 'views/pages/SideMenu.vue';
-import SSVSport from 'views/SSVSport.vue';
-import TestTransition from 'views/pages/TestTransition.vue';
 
 
 import { RouterView } from 'vue-router';
-import {useRouter} from 'vue-router';
+import { useRouter } from 'vue-router';
 
-const route =useRouter();
+const route = useRouter();
 
 </script>
+<style scoped></style>

@@ -27,6 +27,7 @@ export default ({ mode }) => {
         'subpage': fileURLToPath(new URL('./src/components/subpage', import.meta.url)),
         'tools': fileURLToPath(new URL('./src/components/tools', import.meta.url)),
         'subcomponent': fileURLToPath(new URL('./src/components/subcomponent', import.meta.url)),
+        'api': fileURLToPath(new URL('./src/api/repository', import.meta.url)),
       }
     },
   })

@@ -2,22 +2,24 @@
   <div class="wrapper">
     <div class="main-container">
       <div class="main-logo">
-        <!-- <img
-          src="/images/logo.png"
+        <img
+          src="https://scontent.fhan5-11.fna.fbcdn.net/v/t39.30808-1/326110675_1203384177222832_6933858295421194416_n.jpg?stp=dst-jpg_p100x100&_nc_cat=104&ccb=1-7&_nc_sid=fe8171&_nc_ohc=wzJxLAOzWQ0AX8hTqsj&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.fhan5-11.fna&oh=00_AfB1T4EkkudXxgZJDxjd-I3zF2oIyUO9cw1O-O9chbhhmQ&oe=65270763"
           alt="logo image"
-        > -->
+        >
       </div>
       <div class="pl-4">
-        <RouterLink
+        <template
           v-for="route in routes"
           :key="route.name"
-          :to="route.path"
-          class="button-link"
         >
-          <template v-if="route.meta.show">
+          <RouterLink
+            v-if="route.meta.show"
+            :to="route.path"
+            class="button-link"
+          >
             {{ route.name }}
-          </template>
-        </RouterLink>
+          </RouterLink>
+        </template>
         <div />
       </div>
       <div class="ml-auto">
@@ -56,7 +58,7 @@
                 </q-item-label>
               </q-item-section>
             </q-item>
-            
+
             <q-item
               v-close-popup
               clickable
@@ -85,22 +87,22 @@
 import { ref } from 'vue';
 import { useRouter, RouterLink } from 'vue-router';
 import { useDialogStore } from 'src/stores/dialog';
-import { useCookies} from 'vue3-cookies';
+import { useCookies } from 'vue3-cookies';
 const router = useRouter();
 const routes = router.getRoutes();
 const dialog = useDialogStore();
-const {cookies} = useCookies();
+const { cookies } = useCookies();
 
 const dropdown = ref(false);
-const informationClickHandler = () =>{
+const informationClickHandler = () => {
   dialog.show({
-    type:"message",
-    header:"Attention",
-    message:"This Module Is Currently Under Development"
+    type: "message",
+    header: "Attention",
+    message: "This Module Is Currently Under Development"
   })
 }
 
-const signOutClickHandler = () =>{
+const signOutClickHandler = () => {
   cookies.remove("token");
   router.push("/login");
 }
@@ -109,6 +111,8 @@ const signOutClickHandler = () =>{
 <style scoped lang="scss">
 .wrapper {
   z-index: 1;
+  box-shadow: 0 1px 3px -3px rgb(0, 0, 0);
+
   @apply bg-white sticky top-0 left-0 right-0
 }
 
@@ -133,11 +137,11 @@ const signOutClickHandler = () =>{
   @apply flex justify-center items-center cursor-pointer
 }
 
-.dropdown{
+.dropdown {
   width: 1px;
-  height:1px;
-  padding:0;
-  margin:0;
+  height: 1px;
+  padding: 0;
+  margin: 0;
   visibility: hidden;
 
 }

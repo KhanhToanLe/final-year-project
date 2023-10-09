@@ -1,7 +1,21 @@
 <template>
   <div>
     <div class="font-extrabold text-xl pb-4 flex">
-      Add Product
+      <div>
+        <div class="mb-3">
+          Add Product
+        </div>
+        <div class="">
+          <q-btn
+            class="!border-none"
+            @click="backToList"
+          >
+            <CIcon icon="Arrow Back" />
+            Go back
+          </q-btn>
+        </div>
+      </div>
+
       <div class="ml-[auto]">
         <q-btn
           class="!bg-green-600 text-white mr-4"
@@ -23,7 +37,7 @@
         outlined
         label="Name"
         class="w-full"
-        dense 
+        dense
       />
     </div>
     <div class="row-input">
@@ -32,7 +46,7 @@
         outlined
         label="Vietnamese Name"
         class="w-full"
-        dense 
+        dense
       />
     </div>
     <div class="row-input">
@@ -41,7 +55,7 @@
         outlined
         label="Code"
         class="w-full pr-2"
-        dense 
+        dense
       />
       <q-input
         v-model="product.price"
@@ -49,7 +63,7 @@
         type="number"
         label="Price"
         class="w-full"
-        dense 
+        dense
       />
     </div>
     <div class="row-input">
@@ -58,14 +72,14 @@
         outlined
         label="Guarantee "
         class="w-full pr-2"
-        dense 
+        dense
       />
       <q-input
         v-model="product.keyword"
         outlined
         label="Key word"
         class="w-full"
-        dense 
+        dense
       />
     </div>
     <q-btn
@@ -83,7 +97,7 @@
     >
     <div class="border w-full min-h-[200px] border-[#c2c2c2] my-2 rounded-md grid grid-cols-4 gap-4 p-2">
       <div
-        v-for="(file,index) in productImageList"
+        v-for="(file, index) in productImageList"
         :key="index"
         class="relative h-fit image-overlay"
       >
@@ -121,78 +135,82 @@ import { ref } from 'vue';
 import { toBase64 } from 'utils/common';
 import EditorPages from 'tools/EditorPages.vue'
 import productRepository from 'repository/productRepository';
-  const product = ref({
-    name:'',
-    vietnameseName:"",
-    code:"",
-    price:"",
-    keyword:"",
-    guarantee:"",
-    description:"",
-    images:null,
-  });
+const product = ref({
+  name: '',
+  vietnameseName: "",
+  code: "",
+  price: 0,
+  keyword: "",
+  guarantee: 0,
+  description: "",
+  images: null,
+});
 
-  const descriptionEditor = ref();
+const emits = defineEmits(["changeToList"]);
 
-  const productImageList = ref([]);
-  const productImageInput = ref();
+const descriptionEditor = ref();
 
-  const inputFileClickHandler = () =>{
-    productImageInput.value.click();
+const productImageList = ref([]);
+const productImageInput = ref();
+
+const backToList = () => {
+  emits("changeToList");
+}
+const inputFileClickHandler = () => {
+  productImageInput.value.click();
+}
+
+const productImageHandler = async (event) => {
+  const files = event.target.files;
+  for (const file of files) {
+    productImageList.value.push(await toBase64(file));
   }
+  event.target.value = null;
+}
 
-  const productImageHandler = async(event) =>{
-    const files = event.target.files;
-    for(const file of files){
-      productImageList.value.push(await toBase64(file));
-    }
-    event.target.value = null;
-  }
+const deleteImage = (index) => {
+  productImageList.value.splice(index, 1);
+}
 
-  const deleteImage = (index) =>{
-    productImageList.value.splice(index,1);
-  }
-
-  const saveProductHandler = () =>{
-    // call api to save
-    const productReq = product.value; 
-    productReq.images= productImageList.value;
-    productRepository.add(productReq);
-  }
-  const clearProductHandler = () =>{
-    product.value = {
-      name:'',
-      vietnameseName:"",
-      code:"",
-      price:"",
-      keyword:"",
-      guarantee:"",
-      description:"",
-      images:null,
-    };
-    productImageList.value = [];
-    descriptionEditor.value?.clearText();
-  }
+const saveProductHandler = () => {
+  // call api to save
+  const productReq = product.value;
+  productReq.images = productImageList.value;
+  productRepository.add(productReq);
+}
+const clearProductHandler = () => {
+  product.value = {
+    name: '',
+    vietnameseName: "",
+    code: "",
+    price: 0,
+    keyword: "",
+    guarantee: 0,
+    description: "",
+    images: null,
+  };
+  productImageList.value = [];
+  descriptionEditor.value?.clearText();
+}
 
 </script>
 
 <style scoped>
-.row-input{
+.row-input {
   @apply py-1 flex
 }
 
-.overlay-div{
+.overlay-div {
   @apply transition-all;
-  opacity:0;
+  opacity: 0;
 }
-.image-overlay:hover .overlay-div{
+
+.image-overlay:hover .overlay-div {
   /* @apply !visible; */
-  opacity:1;
-  background-color:rgba(22, 14, 14, 0.548);
+  opacity: 1;
+  background-color: rgba(22, 14, 14, 0.548);
 
 }
 
-.overlay-div{
-
-}
+.overlay-div {}
 </style>

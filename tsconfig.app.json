@@ -1,6 +1,11 @@
 {
-  "include": ["env.d.ts", "src/**/*.vue", "src/**/**/*.vue", "components.d.ts","src/**/*.*"],
-
+  "include": [
+    "env.d.ts",
+    "src/**/*.vue",
+    "src/**/**/*.vue",
+    "components.d.ts",
+    "src/**/*.*"
+  ],
   "exclude": [
     "src/**/__tests__/*"
   ],
@@ -46,14 +51,17 @@
       "stores/*": [
         "./src/stores/*"
       ],
-      "subpage/*":[
+      "subpage/*": [
         "./src/components/subpage/*"
       ],
-      "subcomponent/*":[
+      "subcomponent/*": [
         "./src/components/subcomponent/*"
       ],
-      "tools/*":[
+      "tools/*": [
         "./src/components/tools/*"
+      ],
+      "api/*": [
+        "./src/api/repository/*"
       ],
       "@/*": [
         "./*"
