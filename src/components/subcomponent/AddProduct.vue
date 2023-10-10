@@ -20,7 +20,7 @@
       <div class="ml-[auto]">
         <q-btn
           class="!bg-green-600 text-white mr-4"
-          @click="()=> props.isUpdate ? updateImageHandler() : saveProductHandler()"
+          @click="() => props.isUpdate ? updateImageHandler() : saveProductHandler()"
         >
           &nbsp;Save&nbsp;
         </q-btn>
@@ -84,15 +84,22 @@
       />
     </div>
     <div class="row-input">
-      <q-select
-        v-model="product.type"
-        class="w-full"
-        outlined
-        dense
-        option-label="name"
-        :options="props.typeList"
-        label="Product Type"
-      /> {{ product.type }}
+      <q-color
+        v-model="hex"
+        class="my-picker"
+      />
+      <div class="w-full">
+        <div />
+        <q-select
+          v-model="product.type"
+          class="w-full"
+          outlined
+          dense
+          option-label="name"
+          :options="props.typeList"
+          label="Product Type"
+        />
+      </div>
     </div>
     <q-btn
       class="mt-2 !bg-[#8071b3] text-white"
@@ -123,7 +130,7 @@
           <CIcon
             icon="Delete"
             class="text-white !text-[34px] p-4"
-            @click="deleteImage(file,index)"
+            @click="deleteImage(file, index)"
           />
         </div>
       </div>
@@ -150,19 +157,19 @@ import productRepository from 'repository/productRepository';
 import _ from 'lodash';
 
 const props = defineProps({
-  isUpdate:{
-    type:Boolean,
-    required:false,
-    default:false
+  isUpdate: {
+    type: Boolean,
+    required: false,
+    default: false
   },
-  updateProduct:{
-    required:false,
-    default:()=>{},
+  updateProduct: {
+    required: false,
+    default: () => { },
   },
-  typeList:{
+  typeList: {
     type: Array,
-    required:true,
-    default:()=>[]
+    required: true,
+    default: () => []
   }
 });
 
@@ -175,13 +182,13 @@ const product = ref({
   guarantee: 0,
   description: "",
   images: null,
-  type:""
+  type: ""
 });
 
-const updateImageHandler =  () =>{
+const updateImageHandler = () => {
   productRepository.update({
-    product:product.value,
-    Images:allImage.value
+    product: product.value,
+    Images: allImage.value
   })
 }
 
@@ -189,7 +196,7 @@ const emits = defineEmits(["changeToList"]);
 
 const descriptionEditor = ref();
 
-const updateImageList = ref([]); 
+const updateImageList = ref([]);
 const productImageList = ref([]);
 const productImageInput = ref();
 
@@ -208,11 +215,11 @@ const productImageHandler = async (event) => {
   event.target.value = null;
 }
 
-const deleteImage = (file,index) => {
-  if(file.includes(props.updateProduct.id)){
+const deleteImage = (file, index) => {
+  if (file.includes(props.updateProduct.id)) {
     updateImageList.value.splice(index, 1);
-  }else{
-    productImageList.value.splice(index-updateImageList.value.length, 1);
+  } else {
+    productImageList.value.splice(index - updateImageList.value.length, 1);
   }
 }
 
@@ -221,7 +228,7 @@ const saveProductHandler = () => {
   const productReq = _.clone(product.value);
 
   productReq.images = productImageList.value;
-  productReq.typeId= productReq.type.id;
+  productReq.typeId = productReq.type.id;
   delete productReq.type;
   productRepository.add(productReq);
   clearProductHandler();
@@ -241,13 +248,13 @@ const clearProductHandler = () => {
   descriptionEditor.value?.clearText();
 }
 
-const allImage = computed(()=>{
+const allImage = computed(() => {
   const value = updateImageList.value?.concat(productImageList.value);
   return value
 })
 
-onMounted(()=>{
-  if(props.isUpdate){
+onMounted(() => {
+  if (props.isUpdate) {
     product.value = props.updateProduct;
     descriptionEditor.value.setText(product.value.description);
     updateImageList.value = product.value.images.split(",");

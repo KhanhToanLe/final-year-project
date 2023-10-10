@@ -1,10 +1,18 @@
 <template>
   <div class="wrapper">
     <div class="main-container">
-      <div class="main-logo">
+      <div class="flex justify-center h-auto">
         <img
-          src="https://scontent.fhan5-11.fna.fbcdn.net/v/t39.30808-1/326110675_1203384177222832_6933858295421194416_n.jpg?stp=dst-jpg_p100x100&_nc_cat=104&ccb=1-7&_nc_sid=fe8171&_nc_ohc=wzJxLAOzWQ0AX8hTqsj&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.fhan5-11.fna&oh=00_AfB1T4EkkudXxgZJDxjd-I3zF2oIyUO9cw1O-O9chbhhmQ&oe=65270763"
+          v-if="toggleLogo"
+          src="images/logo/10.png"
           alt="logo image"
+          class="w-[100px] h-[80px] object-cover"
+        >
+        <img
+          v-else
+          src="images/logo/11.png"
+          alt="logo image"
+          class="w-[100px] h-[80px] object-cover"
         >
       </div>
       <div class="pl-4">
@@ -84,7 +92,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter, RouterLink } from 'vue-router';
 import { useDialogStore } from 'src/stores/dialog';
 import { useCookies } from 'vue3-cookies';
@@ -93,6 +101,7 @@ const routes = router.getRoutes();
 const dialog = useDialogStore();
 const { cookies } = useCookies();
 
+const toggleLogo = ref(false);
 const dropdown = ref(false);
 const informationClickHandler = () => {
   dialog.show({
@@ -106,6 +115,13 @@ const signOutClickHandler = () => {
   cookies.remove("token");
   router.push("/login");
 }
+
+onMounted(() => {
+  setInterval(() => {
+    console.log('go here');
+    toggleLogo.value = !toggleLogo.value
+  }, 500);
+})
 </script>
 
 <style scoped lang="scss">
@@ -125,7 +141,7 @@ const signOutClickHandler = () => {
 
 .main-container {
   div {
-    @apply flex items-center h-16
+    @apply flex items-center h-auto
   }
 }
 

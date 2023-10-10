@@ -53,16 +53,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import AdminProduct from "subpage/AdminProduct.vue"
 import AdminType from 'subpage/AdminType.vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const drawer = ref(false);
 const menuList = [
   {
     icon: 'inbox',
-    label: 'Inbox',
+    label: 'Go To Page',
     separator: true
+
   },
   {
     icon: 'send',
@@ -109,8 +113,17 @@ const selectedMenu = ref(menuList[0]);
 
 
 const changeTabMenu = (icon) => {
+  // if its is "go to page" menu item => back to page
+  if (icon === "inbox") {
+    router.push("/");
+  }
   selectedMenu.value = menuList.find(x => x.icon == icon);
 }
+
+onMounted(() => {
+  // go to menu product first
+  changeTabMenu("category");
+})
 </script>
 
 <style scoped scss></style>

@@ -71,7 +71,6 @@
       @changeToList="backToListHandler"
     />
   </div>
-  {{ productType }}
 </template>
 
 <script setup lang="ts">
@@ -94,7 +93,7 @@ const addProductClickHandler = () => {
   showTable.value = false;
 }
 
-const updateProductClickHandler = (product) =>{
+const updateProductClickHandler = (product) => {
   modifiedProduct.value = product;
   isUpdate.value = true;
   showAddProduct.value = true;
@@ -152,23 +151,23 @@ const getAllProduct = async () => {
 
 const deleteProduct = async (product) => {
   // console.log(product.id);
-  const result = await  productRepository.delete(product.id);
+  const result = await productRepository.delete(product.id);
   // console.log(result);
   getAllProduct();
 
 }
 
 const selected = ref([]);
-const getSelectedString = ()=> {
+const getSelectedString = () => {
   return selected.value.length === 0 ? '' : `${selected.value.length} record${selected.value.length > 1 ? 's' : ''} selected of ${rows.value.length}`
 }
 
-const isShowDeleteSelectedProduct = computed(()=>{
+const isShowDeleteSelectedProduct = computed(() => {
   return selected.value.length > 0;
 });
 
-const deleteSelected = () =>{
-  const idList = selected.value.map((obj)=> obj.id)
+const deleteSelected = () => {
+  const idList = selected.value.map((obj) => obj.id)
   productRepository.deleteRange(idList);
   getAllProduct();
 }
