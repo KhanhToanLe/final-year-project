@@ -77,12 +77,16 @@ onMounted(()=>{
 })
 
 const clearText = () =>{
-  console.log('go here');
   editor.value.root.innerHTML = "";
 }
 
+const setText = (richText) => {
+  editor.value.root.innerHTML = richText;
+}
+
 defineExpose({
-  clearText
+  clearText,
+  setText
 })
 // watch(
 //   () => props.modelValue,

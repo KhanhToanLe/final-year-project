@@ -1,29 +1,36 @@
 <template>
   <div>
-    <div v-if="isShowTable">
+    <div v-if="showTable">
       <div class="pb-3">
         <q-btn @click="addProductClickHandler">
           Add Product
         </q-btn>
+        <q-btn
+          v-if="isShowDeleteSelectedProduct"
+          class="!bg-red-500 ml-4 text-white"
+          @click="deleteSelected"
+        >
+          Delete Selection
+        </q-btn>
       </div>
       <div>
         <q-table
+          v-model:selected="selected"
           flat
           bordered
           :columns="columns"
           :rows="rows"
           row-key="name"
           class="!h-full"
+          :selected-rows-label="getSelectedString"
+          selection="multiple"
         >
-          <template #header="props">
-            <q-tr :props="props">
-              <q-th v-for="col in props.cols">
-                {{ col.name }}
-              </q-th>
-            </q-tr>
+          <template #header-selection="scope">
+            <q-checkbox v-model="scope.selected" />
           </template>
           <template #body="props">
             <q-tr :props="props">
+              <q-td><q-checkbox v-model="props.selected" /></q-td>
               <q-td v-for="col in props.cols">
                 <div class="text-center flex justify-center items-center">
                   <template v-if="col.name == 'Images'">
@@ -35,7 +42,7 @@
                   <template v-else-if="col.name == 'Function-button'">
                     <q-btn
                       class="!bg-sky-600 text-white mr-1"
-                      @click="updateProduct(props.row)"
+                      @click="updateProductClickHandler(props.row)"
                     >
                       Update{{ col.value }}
                     </q-btn>
@@ -57,30 +64,47 @@
       </div>
     </div>
     <AddProduct
-      v-if="isAddProduct"
+      v-if="showAddProduct"
+      :is-update="isUpdate"
+      :update-product="modifiedProduct"
+      :type-list="productType"
       @changeToList="backToListHandler"
     />
   </div>
+  {{ productType }}
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
 import _ from 'lodash';
-const isShowTable = ref(true);
-const isAddProduct = ref(false);
 import AddProduct from 'subcomponent/AddProduct.vue';
 import productRepository from 'api/productRepository';
+import typeRepository from 'api/typeRepository';
 
 
+const showTable = ref(true);
+const showAddProduct = ref(false);
+const isUpdate = ref(false);
+const modifiedProduct = ref({});
+const productType = ref([]);
 
 const addProductClickHandler = () => {
-  isAddProduct.value = true;
-  isShowTable.value = false;
+  isUpdate.value = false;
+  showAddProduct.value = true;
+  showTable.value = false;
+}
+
+const updateProductClickHandler = (product) =>{
+  modifiedProduct.value = product;
+  isUpdate.value = true;
+  showAddProduct.value = true;
+  showTable.value = false;
+
 }
 
 const backToListHandler = () => {
-  isAddProduct.value = false;
-  isShowTable.value = true;
+  showAddProduct.value = false;
+  showTable.value = true;
   getAllProduct();
 }
 
@@ -94,6 +118,7 @@ const imageToLink = (images) => {
 const data = ref([]);
 
 const columns = [
+
   {
     name: 'Images',
     required: true,
@@ -114,9 +139,9 @@ const columns = [
 
 const rows = computed(() => {
   const rowsValue = _.clone(data.value);
-  rowsValue.push({
-    name: 'function-button'
-  })
+  // rowsValue.push({
+  //   name: 'function-button'
+  // })
   return rowsValue
 })
 
@@ -125,19 +150,38 @@ const getAllProduct = async () => {
   data.value = result.payload;
 }
 
-const updateProduct = (product) => {
+const deleteProduct = async (product) => {
+  // console.log(product.id);
+  const result = await  productRepository.delete(product.id);
+  // console.log(result);
+  getAllProduct();
 
-  console.log(product);
 }
 
-const deleteProduct = (product) => {
-  console.log(product);
+const selected = ref([]);
+const getSelectedString = ()=> {
+  return selected.value.length === 0 ? '' : `${selected.value.length} record${selected.value.length > 1 ? 's' : ''} selected of ${rows.value.length}`
+}
 
+const isShowDeleteSelectedProduct = computed(()=>{
+  return selected.value.length > 0;
+});
+
+const deleteSelected = () =>{
+  const idList = selected.value.map((obj)=> obj.id)
+  productRepository.deleteRange(idList);
+  getAllProduct();
+}
+
+const getAllType = async () => {
+  const result = await typeRepository.get();
+  productType.value = result.payload;
 }
 
 onMounted(() => {
   getAllProduct();
-})
+  getAllType();
+});
 </script>
 
 <style scoped></style>

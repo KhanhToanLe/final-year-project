@@ -13,6 +13,17 @@ class ProductRepository extends BaseRepository {
     return this.client.get("/");
   }
 
+  update(product){
+    return this.client.put("/",product)
+  }
+
+  delete(id){
+    return this.client.delete(`/${id}`);
+  }
+
+  deleteRange(guids){
+    return this.client.post("/delete",guids);
+  }
 
 }
 

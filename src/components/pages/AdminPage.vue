@@ -55,6 +55,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import AdminProduct from "subpage/AdminProduct.vue"
+import AdminType from 'subpage/AdminType.vue';
 
 const drawer = ref(false);
 const menuList = [
@@ -65,8 +66,10 @@ const menuList = [
   },
   {
     icon: 'send',
-    label: 'Outbox',
-    separator: false
+    label: 'Type',
+    separator: false,
+    component: AdminType
+
   },
   {
     icon: "category",

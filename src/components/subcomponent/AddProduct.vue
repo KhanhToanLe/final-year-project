@@ -3,7 +3,8 @@
     <div class="font-extrabold text-xl pb-4 flex">
       <div>
         <div class="mb-3">
-          Add Product
+          <span v-if="!props.isUpdate">Add Product</span>
+          <span v-else>Update Product</span>
         </div>
         <div class="">
           <q-btn
@@ -19,7 +20,7 @@
       <div class="ml-[auto]">
         <q-btn
           class="!bg-green-600 text-white mr-4"
-          @click="saveProductHandler"
+          @click="()=> props.isUpdate ? updateImageHandler() : saveProductHandler()"
         >
           &nbsp;Save&nbsp;
         </q-btn>
@@ -82,6 +83,17 @@
         dense
       />
     </div>
+    <div class="row-input">
+      <q-select
+        v-model="product.type"
+        class="w-full"
+        outlined
+        dense
+        option-label="name"
+        :options="props.typeList"
+        label="Product Type"
+      /> {{ product.type }}
+    </div>
     <q-btn
       class="mt-2 !bg-[#8071b3] text-white"
       @click="inputFileClickHandler"
@@ -97,12 +109,12 @@
     >
     <div class="border w-full min-h-[200px] border-[#c2c2c2] my-2 rounded-md grid grid-cols-4 gap-4 p-2">
       <div
-        v-for="(file, index) in productImageList"
+        v-for="(file, index) in allImage"
         :key="index"
         class="relative h-fit image-overlay"
       >
         <img
-          :src="file"
+          :src="file.includes(props.updateProduct.id) ? `https://localhost:7082/${file}` : file"
           class="h-[auto]"
           :alt="index.toString()"
           accept="image/*"
@@ -111,7 +123,7 @@
           <CIcon
             icon="Delete"
             class="text-white !text-[34px] p-4"
-            @click="deleteImage(index)"
+            @click="deleteImage(file,index)"
           />
         </div>
       </div>
@@ -130,11 +142,30 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue';
+<script setup>
+import { computed, onMounted, ref } from 'vue';
 import { toBase64 } from 'utils/common';
 import EditorPages from 'tools/EditorPages.vue'
 import productRepository from 'repository/productRepository';
+import _ from 'lodash';
+
+const props = defineProps({
+  isUpdate:{
+    type:Boolean,
+    required:false,
+    default:false
+  },
+  updateProduct:{
+    required:false,
+    default:()=>{},
+  },
+  typeList:{
+    type: Array,
+    required:true,
+    default:()=>[]
+  }
+});
+
 const product = ref({
   name: '',
   vietnameseName: "",
@@ -144,12 +175,21 @@ const product = ref({
   guarantee: 0,
   description: "",
   images: null,
+  type:""
 });
+
+const updateImageHandler =  () =>{
+  productRepository.update({
+    product:product.value,
+    Images:allImage.value
+  })
+}
 
 const emits = defineEmits(["changeToList"]);
 
 const descriptionEditor = ref();
 
+const updateImageList = ref([]); 
 const productImageList = ref([]);
 const productImageInput = ref();
 
@@ -168,15 +208,23 @@ const productImageHandler = async (event) => {
   event.target.value = null;
 }
 
-const deleteImage = (index) => {
-  productImageList.value.splice(index, 1);
+const deleteImage = (file,index) => {
+  if(file.includes(props.updateProduct.id)){
+    updateImageList.value.splice(index, 1);
+  }else{
+    productImageList.value.splice(index-updateImageList.value.length, 1);
+  }
 }
 
 const saveProductHandler = () => {
   // call api to save
-  const productReq = product.value;
+  const productReq = _.clone(product.value);
+
   productReq.images = productImageList.value;
+  productReq.typeId= productReq.type.id;
+  delete productReq.type;
   productRepository.add(productReq);
+  clearProductHandler();
 }
 const clearProductHandler = () => {
   product.value = {
@@ -192,6 +240,21 @@ const clearProductHandler = () => {
   productImageList.value = [];
   descriptionEditor.value?.clearText();
 }
+
+const allImage = computed(()=>{
+  const value = updateImageList.value?.concat(productImageList.value);
+  return value
+})
+
+onMounted(()=>{
+  if(props.isUpdate){
+    product.value = props.updateProduct;
+    descriptionEditor.value.setText(product.value.description);
+    updateImageList.value = product.value.images.split(",");
+
+  }
+  product.value.type = props.typeList[0];
+})
 
 </script>
 
