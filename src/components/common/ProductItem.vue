@@ -15,7 +15,7 @@
       </div>
       <div class="product-info flex-none">
         <div class="text-center h-[64px]">
-          {{ props.name }} {{ props.id }}
+          {{ props.name }}
         </div>
         <div class="text-center text-red-500 font-bold pb-[1px]">
           {{ props.price }} USD
@@ -26,7 +26,7 @@
 </template>
 <script setup lang='ts'>
 import { onMounted, ref } from 'vue';
-import {useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 const props = defineProps({
   images: {
     required: true,
@@ -52,28 +52,28 @@ const props = defineProps({
     require: false,
     type: String
   },
-  id:{
-    type:String,
-    required:true,
-    default:""
+  id: {
+    type: String,
+    required: true,
+    default: ""
   }
 });
-const router = useRouter(); 
+const router = useRouter();
 const productImage = ref();
 const presentImageProduct = ref("");
-onMounted(()=>{
+onMounted(() => {
   let imageList = props.images.split(",")
-  if(imageList.length == 0){
+  if (imageList.length == 0) {
     console.log('go here');
     presentImageProduct.value = "images/logo/10.png";
-  }else{
+  } else {
     presentImageProduct.value = `https://localhost:7082/${imageList[0]}`;
   }
 })
 
-const goToProductDetail = () =>{
+const goToProductDetail = () => {
   console.log(props.id);
-  router.push({path:`/product/detail/${props.id}`})
+  router.push({ path: `/product/detail/${props.id}` })
 }
 </script>
 <style scoped lang='scss'>
@@ -84,7 +84,8 @@ const goToProductDetail = () =>{
 .product-img:hover {
   transform: scale(1.1);
 }
-.product-info{
- @apply h-[90px]
+
+.product-info {
+  @apply h-[90px]
 }
 </style>

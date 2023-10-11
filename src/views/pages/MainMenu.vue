@@ -127,7 +127,6 @@ onMounted(() => {
 .wrapper {
   z-index: 1;
   box-shadow: 0 1px 3px -3px rgb(0, 0, 0);
-
   @apply bg-white sticky top-0 left-0 right-0
 }
 

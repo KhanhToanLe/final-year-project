@@ -12,29 +12,33 @@ class ProductRepository extends BaseRepository {
   get() {
     return this.client.get("/");
   }
-  
-  getNewProduct(){
+
+  getNewProduct() {
     return this.client.get("/get-new");
   }
 
-  getByType(typeId){
+  getByType(typeId) {
     return this.client.get(`/get-by-type/${typeId}`);
   }
 
-  getById(id){
+  getById(id) {
     return this.client.get(`/${id}`)
   }
 
-  update(product){
-    return this.client.put("/",product)
+  getRelated(keyword) {
+    return this.client.get(`/get-related/${keyword}`)
   }
 
-  delete(id){
+  update(product) {
+    return this.client.put("/", product)
+  }
+
+  delete(id) {
     return this.client.delete(`/${id}`);
   }
 
-  deleteRange(guids){
-    return this.client.post("/delete",guids);
+  deleteRange(guids) {
+    return this.client.post("/delete", guids);
   }
 
 }

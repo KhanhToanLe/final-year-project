@@ -1,5 +1,5 @@
 <template>
-  <div class="w-[240px] mr-2">
+  <div class="w-[240px] mr-5">
     <template
       v-for="(cate, index) in category"
       :key="cate"

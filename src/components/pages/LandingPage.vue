@@ -69,7 +69,7 @@
       </div>
       <div class="flex mx-[-8px]">
         <div
-          v-for="(type,index) in typeList"
+          v-for="(type, index) in typeList"
           class="flex-1 m-[8px] overflow-hidden"
         >
           <div class="product-img relative ">
@@ -78,13 +78,15 @@
               class="h-[240px] w-full object-cover "
               :alt="index.toString()"
             >
-            <div class="hidden absolute top-0 left-0 right-0 bottom-0 bg-[#00000077] justify-center items-center text-white text-base">
+            <div
+              class="hidden absolute top-0 left-0 right-0 bottom-0 bg-[#00000077] justify-center items-center text-white text-base"
+            >
               {{ type.name }}
             </div>
           </div>
         </div>
       </div>
-      
+
       <div class=" text-lg font-bold flex border border-dotted my-3">
         <div class="mr-[auto] ">
           <span class=" text-white bg-[#8071b3] h-full block p-2 uppercase">
@@ -144,7 +146,7 @@ import FooterInfo from 'subpage/FooterInfo.vue';
 const firstSlide = ref(0);
 const keyboardSlide = ref(1);
 const typeList = ref([]);
-onMounted(async() => {
+onMounted(async () => {
   // get new product
   const result = await productRepository.getNewProduct();
   newProductList.value = result.payload;
@@ -200,7 +202,7 @@ const mouseList = ref([]);
 .product-img:hover {
   transform: scale(1.1);
 }
-.product-img:hover > div{
+
+.product-img:hover>div {
   display: flex !important;
-}
-</style>src/utils/static-link.js
+}</style>src/utils/static-link.js
