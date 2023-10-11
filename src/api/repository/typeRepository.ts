@@ -13,9 +13,22 @@ class TypeRepository extends BaseRepository {
     return this.client.get("/");
   }
 
+  getByShowLandingPage(){
+    return this.client.get("/get-by-landing-page");
+  }
+
   delete(guid){
     return this.client.delete(`/${guid}`);
   }
+
+  updateFlagShow(guid,isShow){
+    return this.client.put(`/`,{
+      id: guid,
+      isShow:isShow
+    });
+  }
+
+
   
 
 }

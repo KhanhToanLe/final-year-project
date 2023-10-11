@@ -69,9 +69,10 @@ const emits = defineEmits(["update:modelValue"]);
 .img-zoom {
   height: auto;
   width: 100%;
+  
   transition: transform .6s;
   overflow: hidden;
-  @apply object-fill
+  @apply object-center
 }
 
 .img-zoom:hover {

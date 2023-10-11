@@ -34,7 +34,7 @@ const props = defineProps({
   breadCrumb: {
     require: true,
     type: String,
-    default: "TRANG CHỦ / BÀN PHÍM"
+    default: "HOME / PRODUCT"
   },
   showSortBy: {
     required: false,

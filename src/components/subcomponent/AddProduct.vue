@@ -195,7 +195,6 @@ const updateImageHandler = () => {
 const emits = defineEmits(["changeToList"]);
 
 const descriptionEditor = ref();
-
 const updateImageList = ref([]);
 const productImageList = ref([]);
 const productImageInput = ref();
@@ -222,6 +221,8 @@ const deleteImage = (file, index) => {
     productImageList.value.splice(index - updateImageList.value.length, 1);
   }
 }
+
+
 
 const saveProductHandler = () => {
   // call api to save

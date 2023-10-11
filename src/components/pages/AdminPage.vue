@@ -57,6 +57,7 @@ import { onMounted, ref } from 'vue';
 import AdminProduct from "subpage/AdminProduct.vue"
 import AdminType from 'subpage/AdminType.vue';
 import { useRouter } from 'vue-router';
+import AdminLandingPageSideShow from 'subpage/AdminLandingPageSideShow.vue';
 
 const router = useRouter();
 
@@ -70,10 +71,9 @@ const menuList = [
   },
   {
     icon: 'send',
-    label: 'Type',
+    label: 'Product Type',
     separator: false,
     component: AdminType
-
   },
   {
     icon: "category",
@@ -83,8 +83,10 @@ const menuList = [
   },
   {
     icon: 'delete',
-    label: 'Trash',
-    separator: false
+    label: 'Slide Show',
+    separator: false,
+    component: AdminLandingPageSideShow
+
   },
   {
     icon: 'error',

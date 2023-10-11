@@ -1,33 +1,34 @@
 <template>
   <div
-    class="h-[390px] overflow-hidden"
+    class="h-[390px]"
     v-bind="$attrs"
     :class="props.class"
+    @click="goToProductDetail"
   >
-    <div class="border m-1 h-auto">
-      <div class="product-image w-[100%] flex items-center justify-center overflow-hidden">
+    <div class="border m-1 h-full flex flex-col flex-auto !flex-nowrap">
+      <div class="product-image w-[100%] flex items-center justify-center overflow-hidden  flex-auto">
         <img
-          :src="props.src"
+          :src="presentImageProduct"
           :alt="props.alt"
-          class="w-[100%] product-img"
+          class="w-[100%] h-[100%] product-img object-cover"
         >
       </div>
-      <div class="product-info">
-        <div class="max-h-[64psx] text-center h-[64px]">
-          {{ props.name }}
+      <div class="product-info flex-none">
+        <div class="text-center h-[64px]">
+          {{ props.name }} {{ props.id }}
         </div>
         <div class="text-center text-red-500 font-bold pb-[1px]">
-          {{ props.price }}
+          {{ props.price }} USD
         </div>
       </div>
     </div>
   </div>
 </template>
 <script setup lang='ts'>
-import { ref } from 'vue';
-
+import { onMounted, ref } from 'vue';
+import {useRouter } from 'vue-router';
 const props = defineProps({
-  src: {
+  images: {
     required: true,
     type: String,
     default: ""
@@ -50,11 +51,30 @@ const props = defineProps({
   class: {
     require: false,
     type: String
+  },
+  id:{
+    type:String,
+    required:true,
+    default:""
   }
 });
-
+const router = useRouter(); 
 const productImage = ref();
+const presentImageProduct = ref("");
+onMounted(()=>{
+  let imageList = props.images.split(",")
+  if(imageList.length == 0){
+    console.log('go here');
+    presentImageProduct.value = "images/logo/10.png";
+  }else{
+    presentImageProduct.value = `https://localhost:7082/${imageList[0]}`;
+  }
+})
 
+const goToProductDetail = () =>{
+  console.log(props.id);
+  router.push({path:`/product/detail/${props.id}`})
+}
 </script>
 <style scoped lang='scss'>
 .product-img {
@@ -63,6 +83,8 @@ const productImage = ref();
 
 .product-img:hover {
   transform: scale(1.1);
-
+}
+.product-info{
+ @apply h-[90px]
 }
 </style>

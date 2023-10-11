@@ -2,6 +2,7 @@
   <div class="flex flex-nowrap ">
     <div class="pr-4 flex-1">
       <q-carousel
+        v-if="product.images"
         v-model="imageSlide"
         v-model:fullscreen="fullscreen"
         swipeable
@@ -9,22 +10,13 @@
         thumbnails
         infinite
       >
-        <q-carousel-slide
-          :name="1"
-          img-src="https://cdn.quasar.dev/img/mountains.jpg"
+        <q-carousel-slide 
+          v-for="(item,index) in product.images.split(',')"
+          :key="index.toString()"
+          :name="index"
+          :img-src="`https://localhost:7082/${item}`"
         />
-        <q-carousel-slide
-          :name="2"
-          img-src="https://cdn.quasar.dev/img/parallax1.jpg"
-        />
-        <q-carousel-slide
-          :name="3"
-          img-src="https://cdn.quasar.dev/img/parallax2.jpg"
-        />
-        <q-carousel-slide
-          :name="4"
-          img-src="https://cdn.quasar.dev/img/quasar.jpg"
-        />
+      
         <template #control>
           <q-carousel-control
             position="bottom-right"
@@ -44,18 +36,18 @@
       </q-carousel>
     </div>
     <div class="flex-1">
-      <div>TRANG CHỦ / CẤU TRÚC BÀN PHÍM / GASKET MOUNT</div>
+      <div>HOME / PRODUCT</div>
       <div class="text-black text-2xl pb-2">
-        Bàn phím MonsGeek M1 QMK Silver (Full Nhôm – Mạch xuôi – QMK / VIA – RGB – Hotswap)
+        {{ product.name }}
       </div>
       <div class="text-red-500 text-xl font-bold">
-        2.00đ
+        {{ product.price }} USD
       </div>
       <div class="border-t-[1px] mt-4 text-black">
-        <span class="text-gray-400">Category</span>: keyboard
+        <span class="text-gray-400">Code</span>: {{ product.code }}
       </div>
       <div class="border-t-[1px] mt-4 text-black">
-        <span class="text-gray-400">Keyword</span>: akko
+        <span class="text-gray-400">Keyword</span>: {{ product.keyword }}
       </div>
       <div class="flex pt-10 justify-between">
         <QBtn class="!border-[#8071b3] !w-[212px] !py-4 !m-2">
@@ -71,10 +63,29 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import productRepository from 'api/productRepository';
+
+const router = useRouter();
 
 const fullscreen = ref(false);
-const imageSlide = ref(1);
+const imageSlide = ref(0);
+
+const product = ref({
+  images:""
+});
+
+const getProduct = async(id) =>{
+  const result  = await productRepository.getById(id);
+  product.value = result.payload;
+}
+
+onMounted(()=>{
+  const id = router.currentRoute.value.params.id;
+  getProduct(id);
+
+})
 </script>
 
 <style scoped>

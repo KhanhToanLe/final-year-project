@@ -5,23 +5,21 @@
         <q-btn @click="addTypeClickHandler">
           Add Type
         </q-btn>
-        <q-btn
-          v-if="isShowDeleteSelectedProduct"
-          class="!bg-red-500 ml-4 text-white"
-          @click="deleteSelected"
-        >
-          Delete Selection
-        </q-btn>
       </div>
       <div>
         <q-table
+          v-model:selected="selected"
           flat
           bordered
           :columns="columns"
           :rows="rows"
           row-key="name"
           class="!h-full"
+          selection="multiple"
         >
+          <template #header-selection="scope">
+            Images 
+          </template>
           <template #body="props">
             <q-tr :props="props">
               <q-td v-for="col in props.cols">
@@ -34,10 +32,22 @@
                       Delete
                     </q-btn>
                   </template>
+                  <template v-else-if="col.name == 'Images'">
+                    <img
+                      :src="imageToLink(col.value)"
+                      class="w-[50px] h-auto"
+                    >
+                  </template>
                   <template v-else>
                     {{ col.value }}
                   </template>
                 </div>
+              </q-td>
+              <q-td class="w-[24x] text-center">
+                <q-checkbox
+                  v-model="props.row.isShowInLandingPage"
+                  @click="changeEvent(props.row.id,props.row.isShowInLandingPage)"
+                />
               </q-td>
             </q-tr>
           </template>
@@ -52,7 +62,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, nextTick, onMounted, ref, watch, watchEffect } from 'vue';
 import _ from 'lodash';
 import AddType from 'subcomponent/AddType.vue';
 import productRepository from 'api/productRepository';
@@ -66,6 +76,7 @@ const addTypeClickHandler = () => {
   showAddType.value = true;
   showTable.value = false;
 }
+const selected = ref();
 
 const backToListHandler = () => {
   showAddType.value = false;
@@ -76,17 +87,16 @@ const backToListHandler = () => {
 const data = ref([]);
 
 const columns = [
-
   {
-    name: 'Id',
+    name: 'Images',
     required: true,
-    label: 'Id',
+    label: 'Name',
     align: 'center',
-    field: 'id',
-    sortable: true
+    field: 'images',
   },
-  { name: 'Name', align: 'center', label: 'Name', field: 'name', sortable: true },
-  { name: 'Function-button', align: 'center', label: 'Action'},
+  { name: 'Name', align: 'center', label: 'Action', field: 'name' },
+  { name: 'Function-button', align: 'center', label: 'Show Lading Page'},
+  
 ] as any
 
 const rows = computed(() => {
@@ -110,11 +120,6 @@ const deleteType = async (type) => {
 
 }
 
-const selected = ref([]);
-
-const isShowDeleteSelectedProduct = computed(()=>{
-  return selected.value.length > 0;
-});
 
 const deleteSelected = () =>{
   const idList = selected.value.map((obj)=> obj.id)
@@ -122,9 +127,22 @@ const deleteSelected = () =>{
   getAllType();
 }
 
+const imageToLink = (images) => {
+  if (images) {
+    return `https://localhost:7082/${images.split(",")[0].trim()}`;
+  }
+
+}
+
+const changeEvent = async(id,isShow) =>{
+  await typeRepository.updateFlagShow(id,isShow)
+  getAllType();
+}
+
 onMounted(() => {
   getAllType();
 })
+
 </script>
 
 <style scoped></style>

@@ -12,6 +12,18 @@ class ProductRepository extends BaseRepository {
   get() {
     return this.client.get("/");
   }
+  
+  getNewProduct(){
+    return this.client.get("/get-new");
+  }
+
+  getByType(typeId){
+    return this.client.get(`/get-by-type/${typeId}`);
+  }
+
+  getById(id){
+    return this.client.get(`/${id}`)
+  }
 
   update(product){
     return this.client.put("/",product)

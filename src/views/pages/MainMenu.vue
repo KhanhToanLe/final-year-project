@@ -4,13 +4,13 @@
       <div class="flex justify-center h-auto">
         <img
           v-if="toggleLogo"
-          src="images/logo/10.png"
+          src="/images/logo/10.png"
           alt="logo image"
           class="w-[100px] h-[80px] object-cover"
         >
         <img
           v-else
-          src="images/logo/11.png"
+          src="/images/logo/11.png"
           alt="logo image"
           class="w-[100px] h-[80px] object-cover"
         >
@@ -118,7 +118,6 @@ const signOutClickHandler = () => {
 
 onMounted(() => {
   setInterval(() => {
-    console.log('go here');
     toggleLogo.value = !toggleLogo.value
   }, 500);
 })

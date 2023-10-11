@@ -35,7 +35,7 @@ export const routes = [
         }
       },
       {
-        path: "detail",
+        path: "detail/:id",
         component: ProductDetail,
         meta: {
           showSortBy: false,
@@ -171,6 +171,17 @@ export const routes = [
     },
     component: VerifyAccount
   },
+  //  {
+  //   path: "/product-detail/:id",
+  //   name: "Product Detail",
+  //   show: false,
+  //   meta: {
+  //     show: false,
+  //     showMainMenu: false,
+  //     showSidebar: false
+  //   },
+  //   component: ProductDetail
+  // },
   {
     name: "Sign Up",
     path: "/sign-up",
