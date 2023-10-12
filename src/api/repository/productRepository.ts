@@ -29,6 +29,8 @@ class ProductRepository extends BaseRepository {
     return this.client.get(`/get-related/${keyword}`)
   }
 
+ 
+
   update(product) {
     return this.client.put("/", product)
   }

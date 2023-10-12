@@ -7,7 +7,6 @@ import AdminPage from 'src/components/pages/AdminPage.vue';
 import MainMenu from 'views/pages/MainMenu.vue';
 import SideMenu from 'views/pages/SideMenu.vue';
 
-
 import { RouterView } from 'vue-router';
 import { useRouter } from 'vue-router';
 

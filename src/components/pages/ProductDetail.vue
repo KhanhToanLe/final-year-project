@@ -51,10 +51,16 @@
           <span class="text-gray-400">Keyword</span>: {{ product.keyword }}
         </div>
         <div class="flex pt-10 justify-between">
-          <QBtn class="!border-[#8071b3] !w-[212px] !py-4 !m-2">
+          <QBtn
+            class="!border-[#8071b3] !w-[212px] !py-4 !m-2"
+            @click="addToCart"
+          >
             Add To Card
           </QBtn>
-          <QBtn class=" text-white !bg-[#8071b3] !w-[212px] !py-4 !m-2">
+          <QBtn
+            class=" text-white !bg-[#8071b3] !w-[212px] !py-4 !m-2"
+            @click="buyProduct"
+          >
             Buy
           </QBtn>
           <div />
@@ -142,6 +148,12 @@ import { SLIDE_SHOW_MODE } from 'src/common/enum';
 import * as Math from 'common/math';
 import SlideShow from 'components/base/SlideShow.vue';
 import ProductItem from 'components/common/ProductItem.vue';
+import cartRepository from 'api/cartRepository';
+// eslint-disable-next-line vue/prefer-import-from-vue
+import { inject } from '@vue/runtime-core'
+import { useMainMenuStore } from 'src/stores/mainMenu';
+
+const mainMenuStore = useMainMenuStore();
 
 const router = useRouter()
 const route = useRoute();
@@ -154,6 +166,12 @@ const product = ref({
   images: ""
 });
 
+const addToCart = async() =>{
+  const currentProductId = product.value.id;
+  await cartRepository.addToCart(currentProductId,1);
+  mainMenuStore.myCallback();
+}
+
 const getProduct = async (id) => {
   const result = await productRepository.getById(id);
   product.value = result.payload;
@@ -162,6 +180,11 @@ const getProduct = async (id) => {
 const getRelatedProduct = async (keyword) => {
   const result = await productRepository.getRelated(keyword);
   relatedProductList.value = result.payload;
+}
+
+const buyProduct = async () =>{
+  const result = await cartRepository.getProductByAccount();
+  console.log(result);
 }
 
 onMounted(async () => {
@@ -177,7 +200,7 @@ watch(() => route.params.id, async () => {
   const id = router.currentRoute.value.params.id;
   getProduct(id);
   await getRelatedProduct(product.value.keyword)
-})
+});
 
 </script>
 

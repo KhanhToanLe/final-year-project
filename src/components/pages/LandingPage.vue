@@ -133,7 +133,7 @@
 </template>
 <script setup lang="ts">
 
-import { onMounted, ref } from 'vue';
+import { onMounted, provide, ref } from 'vue';
 import { landingPageFirstSlideImages } from 'utils/static-link';
 import SlideShow from 'components/base/SlideShow.vue';
 import ProductItem from 'components/common/ProductItem.vue';
@@ -142,7 +142,7 @@ import * as Math from 'common/math';
 import productRepository from 'api/productRepository';
 import typeRepository from 'api/typeRepository';
 import FooterInfo from 'subpage/FooterInfo.vue';
-
+provide('test2','valuetest2');
 const firstSlide = ref(0);
 const keyboardSlide = ref(1);
 const typeList = ref([]);
@@ -172,7 +172,6 @@ const imageToLink = (images) => {
   if (images) {
     return `https://localhost:7082/${images.split(",")[0].trim()}`;
   }
-
 }
 
 const newProductList = ref([]);

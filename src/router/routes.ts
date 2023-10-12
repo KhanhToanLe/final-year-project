@@ -5,6 +5,7 @@ import AdminPage from 'pages/AdminPage.vue';
 import ProductDetail from 'pages/ProductDetail.vue';
 import ProductList from 'pages/ProductList.vue'
 import ProductLayout from 'src/components/pages/ProductLayout.vue';
+import CartPage from 'pages/CartPage.vue';
 
 export const routes = [
   {
@@ -137,6 +138,16 @@ export const routes = [
       showMainMenu: false,
       showSidebar: false
 
+    }
+  },
+  {
+    path: "/cart",
+    name: "Cart",
+    component:CartPage,
+    meta: {
+      show: true,
+      showMainMenu: true,
+      showSidebar: false
     }
   },
   {

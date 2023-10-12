@@ -33,6 +33,52 @@
       <div class="ml-auto">
         <div class="menu-icon">
           <CIcon
+            icon="Shopping Cart"
+            class="w-12 !text-lg text-center"
+            @mouseenter="cartDropdown = true"
+            @mouseleave="cartDropdown = false"
+            @click="gotoCartDetail"
+          />
+        </div>
+        <q-btn-dropdown
+          v-model="cartDropdown"
+          color="primary"
+          class="dropdown overflow-visible"
+        >
+          <div class="">
+            <div class="">
+              <template v-if="productCart.length != 0">
+                <div
+                  v-for="product in productCart"
+                  :key="product.toString()"
+                  class="grid grid-cols-5 gap-1 max-w-[500px] p-2"
+                >
+                  <div>
+                    <img
+                      :src="imageToLink(product.product.images)"
+                      alt=""
+                      class="w-[80px] h-[80px] object-cover p-1"
+                    >
+                  </div>
+                  <div class="col-span-3">
+                    {{ product.product.name }}
+                  </div>
+                  <div class="col-span-1 text-right text-red-500">
+                    {{ product.product.price }} USD
+                  </div>
+                </div>
+              </template>
+              <div
+                v-else
+                class="w-[400px] h-[80px] flex justify-center items-center"
+              >
+                there is no product!
+              </div>
+            </div>
+          </div>
+        </q-btn-dropdown>
+        <div class="menu-icon">
+          <CIcon
             icon="Search"
             class="w-12 !text-lg text-center"
           />
@@ -44,6 +90,7 @@
             @click="dropdown = !dropdown"
           />
         </div>
+        
         <q-btn-dropdown
           v-model="dropdown"
           color="primary"
@@ -92,35 +139,68 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref,provide } from 'vue';
+
 import { useRouter, RouterLink } from 'vue-router';
 import { useDialogStore } from 'src/stores/dialog';
 import { useCookies } from 'vue3-cookies';
+import accountRepository from 'src/api/repository/accountRepository';
+import cartRepository from 'src/api/repository/cartRepository';
+import { useMainMenuStore } from 'src/stores/mainMenu';
+const mainMenuStore = useMainMenuStore();
 const router = useRouter();
 const routes = router.getRoutes();
 const dialog = useDialogStore();
 const { cookies } = useCookies();
 
+const cartDropdown = ref(false);
 const toggleLogo = ref(false);
 const dropdown = ref(false);
 const informationClickHandler = () => {
+
+  const result =accountRepository.getMe();
+  console.log(result);
   dialog.show({
     type: "message",
     header: "Attention",
     message: "This Module Is Currently Under Development"
   })
 }
+const productCart = ref([]);
+
+const getProductCart = async() =>{
+  console.log('go here')
+  const result = await cartRepository.getProductByAccount();
+  productCart.value = result.payload;
+}
+
+mainMenuStore.myCallback = getProductCart;
+
+provide('get-product-cart-list', 'tes1');
+
 
 const signOutClickHandler = () => {
   cookies.remove("token");
   router.push("/login");
 }
 
+const gotoCartDetail = () =>{
+  alert('go to cart detial')
+}
+
 onMounted(() => {
   setInterval(() => {
     toggleLogo.value = !toggleLogo.value
   }, 500);
+  getProductCart();
 })
+
+const imageToLink = (images) => {
+  if (images) {
+    return `https://localhost:7082/${images.split(",")[0].trim()}`;
+  }
+
+}
 </script>
 
 <style scoped lang="scss">

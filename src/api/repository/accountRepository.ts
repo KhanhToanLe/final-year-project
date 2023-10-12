@@ -16,6 +16,10 @@ class AccountRepository extends BaseRepository {
   login(user){
     return this.client.post("/login",user);
   }
+  
+  getMe(){
+    return this.client.get("/get-me");
+  }
 
 }
 

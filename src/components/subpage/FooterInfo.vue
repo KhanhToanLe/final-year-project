@@ -48,6 +48,11 @@
   </div>
 </template>
 <script setup lang='ts'>
+import {inject, onMounted} from 'vue';
+onMounted(()=>{
+  console.log(inject('test2'));
+
+})
 </script>
 <style scoped lang='scss'>
 .wrapper {
