@@ -58,6 +58,7 @@ import AdminProduct from "subpage/AdminProduct.vue"
 import AdminType from 'subpage/AdminType.vue';
 import { useRouter } from 'vue-router';
 import AdminLandingPageSideShow from 'subpage/AdminLandingPageSideShow.vue';
+import AdminCart from 'subpage/AdminCart.vue'
 
 const router = useRouter();
 
@@ -90,8 +91,9 @@ const menuList = [
   },
   {
     icon: 'error',
-    label: 'Spam',
-    separator: true
+    label: 'Cart',
+    separator: true,
+    component: AdminCart
   },
   {
     icon: 'settings',

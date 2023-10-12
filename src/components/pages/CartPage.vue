@@ -36,8 +36,8 @@
           />
         </div>
         <div
-          class="col-span-1 col-center " 
-          :class="[{'opacity-60':!selectedProduct.includes(item.id)}]"
+          class="col-span-1 col-center "
+          :class="[{ 'opacity-60': !selectedProduct.includes(item.id) }]"
         >
           <img
             :src="imageToLink(item.product.images)"
@@ -47,13 +47,13 @@
         </div>
         <div
           class="col-span-5 col-center !justify-start"
-          :class="[{'opacity-60':!selectedProduct.includes(item.id)}]"
+          :class="[{ 'opacity-60': !selectedProduct.includes(item.id) }]"
         >
           {{ item.product.name }}
         </div>
         <div
           class="col-span-1 col-center text-red-500 font-semibold"
-          :class="[{'!text-gray-400':!selectedProduct.includes(item.id)}]"
+          :class="[{ '!text-gray-400': !selectedProduct.includes(item.id) }]"
         >
           {{ item.product.price }} USD
         </div>
@@ -61,7 +61,7 @@
           <div class="">
             <div
               class="flex"
-              :class="[{'disabled':!selectedProduct.includes(item.id)}]"
+              :class="[{ 'disabled': !selectedProduct.includes(item.id) }]"
             >
               <div
                 class="flex items-center justify-center w-8 h-8 bg-slate-200"
@@ -93,21 +93,22 @@
         </div>
         <div
           class="col-span-2 col-center text-red-500 font-semibold"
-          :class="[{'!text-gray-400':!selectedProduct.includes(item.id)}]"
+          :class="[{ '!text-gray-400': !selectedProduct.includes(item.id) }]"
         >
           {{ item.mount * item.product.price }} USD
         </div>
       </div>
     </div>
     <div class="mt-8 flex">
-      <div>
+      <!-- TODO : coupon feature -->
+      <div v-if="false">
         <div class="pb-1 pl-1">
           you saved ${{ totalSavedCouponPrice }}
         </div>
         <div class="flex !flex-nowrap">
           <q-input
             v-model="coupon"
-            outlined 
+            outlined
             dense
             placeholder="Enter coupon code"
             class="w-full"
@@ -146,7 +147,7 @@
             class="!bg-[#8071b3] text-white"
             @click="purchase"
           >
-            Purchase
+            Order
           </q-btn>
         </div>
       </div>
@@ -157,20 +158,22 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
 import cartRepository from 'api/cartRepository';
+import { useDialogStore } from 'src/stores/dialog';
 const productList = ref([]);
 const coupon = ref("");
-const totalSavedCouponPrice = ref(0); 
+const totalSavedCouponPrice = ref(0);
 const recentCouponCode = ref('D2SDA');
+const dialog = useDialogStore();
 
 const selectedProduct = ref([]);
-const getCartProduct = async() =>{
-  const result  =await cartRepository.getProductByAccount();
+const getCartProduct = async () => {
+  const result = await cartRepository.getProductByAccount();
   productList.value = result.payload;
 }
 
-const totalPrice = computed(()=>{
-  return productList.value.reduce((ac,cur)=>{
-    if(selectedProduct.value.includes(cur.id)){
+const totalPrice = computed(() => {
+  return productList.value.reduce((ac, cur) => {
+    if (selectedProduct.value.includes(cur.id)) {
       return (cur.mount * cur.product.price) + (ac)
     }
     return ac;
@@ -183,14 +186,14 @@ const imageToLink = (images) => {
   }
 }
 
-const up = async (id) =>{
-  await cartRepository.updateMountProduct(id,1);
+const up = async (id) => {
+  await cartRepository.updateMountProduct(id, 1);
   getCartProduct();
   // productList.value.find(c=>c.id == id).mount++;
 }
 
-const down = async (id) =>{
-  await cartRepository.updateMountProduct(id,-1);
+const down = async (id) => {
+  await cartRepository.updateMountProduct(id, -1);
   getCartProduct();
   // var theProduct = productList.value.find(c=>c.id == id);
   // if(theProduct.mount !== 0){
@@ -198,15 +201,26 @@ const down = async (id) =>{
   // }
 }
 
-const backToShop = () =>{
+const backToShop = () => {
 
 }
-const purchase = () => {
-
-}
-
-onMounted(()=>{
+const purchase = async () => {
+  // dialog.show({
+  //   type:"message",
+  //   header:"Confirm",
+  //   message:"Do you want to "
+  // })
+  // cartRepository.updateState()
+  for (var product of selectedProduct.value) {
+    await cartRepository.updateState(product, "InOrder", true);
+  }
   getCartProduct();
+}
+
+onMounted(() => {
+  // foreach(var selectedProduct of 
+  getCartProduct();
+
 })
 </script>
 
@@ -221,7 +235,7 @@ onMounted(()=>{
   /* @apply  */
 }
 
-.col-center{
+.col-center {
   @apply flex justify-center items-center
 }
 </style>

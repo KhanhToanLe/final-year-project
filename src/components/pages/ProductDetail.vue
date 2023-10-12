@@ -166,9 +166,12 @@ const product = ref({
   images: ""
 });
 
-const addToCart = async() =>{
+const addToCart = async () => {
   const currentProductId = product.value.id;
-  await cartRepository.addToCart(currentProductId,1);
+  const result = await cartRepository.addToCart(currentProductId, 1);
+  if (!result.payload) {
+    router.push("/login");
+  }
   mainMenuStore.myCallback();
 }
 
@@ -182,7 +185,7 @@ const getRelatedProduct = async (keyword) => {
   relatedProductList.value = result.payload;
 }
 
-const buyProduct = async () =>{
+const buyProduct = async () => {
   const result = await cartRepository.getProductByAccount();
   console.log(result);
 }

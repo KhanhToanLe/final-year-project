@@ -90,7 +90,7 @@
             @click="dropdown = !dropdown"
           />
         </div>
-        
+
         <q-btn-dropdown
           v-model="dropdown"
           color="primary"
@@ -139,7 +139,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref,provide } from 'vue';
+import { onMounted, ref, provide } from 'vue';
 
 import { useRouter, RouterLink } from 'vue-router';
 import { useDialogStore } from 'src/stores/dialog';
@@ -158,7 +158,7 @@ const toggleLogo = ref(false);
 const dropdown = ref(false);
 const informationClickHandler = () => {
 
-  const result =accountRepository.getMe();
+  const result = accountRepository.getMe();
   console.log(result);
   dialog.show({
     type: "message",
@@ -168,7 +168,7 @@ const informationClickHandler = () => {
 }
 const productCart = ref([]);
 
-const getProductCart = async() =>{
+const getProductCart = async () => {
   console.log('go here')
   const result = await cartRepository.getProductByAccount();
   productCart.value = result.payload;
@@ -184,8 +184,8 @@ const signOutClickHandler = () => {
   router.push("/login");
 }
 
-const gotoCartDetail = () =>{
-  alert('go to cart detial')
+const gotoCartDetail = () => {
+  router.push("/cart");
 }
 
 onMounted(() => {

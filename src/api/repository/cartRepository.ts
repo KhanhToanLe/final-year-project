@@ -5,16 +5,20 @@ class CartRepository extends BaseRepository {
     super('cart');
   }
 
-  addToCart(productId,quantity){
+  addToCart(productId, quantity) {
     return this.client.get(`/${productId}/${quantity}`);
   }
-  
-  getProductByAccount(){
+
+  getProductByAccount() {
     return this.client.get("/");
   }
 
-  updateMountProduct(cartId,increaseStep){
+  updateMountProduct(cartId, increaseStep) {
     return this.client.put(`/${cartId}/${increaseStep}`);
+  }
+
+  updateState(cartId, status, delFlag) {
+    return this.client.put(`/${cartId}/${status}/${delFlag}`);
   }
 }
 
