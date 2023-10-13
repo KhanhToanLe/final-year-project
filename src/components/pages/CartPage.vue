@@ -137,12 +137,12 @@
           <span>${{ totalPrice }}</span>
         </div>
         <div class="pt-auto">
-          <q-btn
+          <!-- <q-btn
             class="mr-4"
             @click="backToShop"
           >
             Continue Shopping
-          </q-btn>
+          </q-btn> -->
           <q-btn
             class="!bg-[#8071b3] text-white"
             @click="purchase"
@@ -204,6 +204,7 @@ const down = async (id) => {
 const backToShop = () => {
 
 }
+
 const purchase = async () => {
   // dialog.show({
   //   type:"message",

@@ -84,20 +84,30 @@
       />
     </div>
     <div class="row-input">
-      <q-color
+      <!-- <q-color
         v-model="hex"
         class="my-picker"
-      />
+      /> -->
       <div class="w-full">
         <div />
         <q-select
           v-model="product.type"
-          class="w-full"
+          class="w-full pr-2"
           outlined
           dense
           option-label="name"
           :options="props.typeList"
           label="Product Type"
+        />
+      </div>
+      <div class="w-full">
+        <q-input
+          v-model="product.mounts"
+          type="number"
+          class="w-full"
+          outlined
+          dense
+          label="mount"
         />
       </div>
     </div>
@@ -182,7 +192,8 @@ const product = ref({
   guarantee: 0,
   description: "",
   images: null,
-  type: ""
+  type: "",
+  mounts:0
 });
 
 const updateImageHandler = () => {

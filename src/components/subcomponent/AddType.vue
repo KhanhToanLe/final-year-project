@@ -60,11 +60,11 @@
       <div
         v-for="(file, index) in typeImageList"
         :key="index"
-        class="relative h-fit image-overlay"
+        class="relative h-auto image-overlay"
       >
         <img
           :src="file"
-          class="h-[auto]"
+          class="h-[auto] object-cover w-auto"
           :alt="index.toString()"
           accept="image/*"
         >
@@ -97,13 +97,15 @@ const backToList = () => {
   emits("changeToList");
 }
 
-const saveType = () => {
+const saveType = async () => {
   // call api to save
   const typeValue = type.value;
   typeValue.images = typeImageList.value;
   console.log(typeValue.images);
-  typeRepository.add(typeValue);
+  await typeRepository.add(typeValue);
   clearTypeHandler();
+  emits("changeToList");
+
 }
 const clearTypeHandler = () => {
   type.value = {
@@ -136,13 +138,6 @@ const typeImageHandler = async (event) => {
 .overlay-div {
   @apply transition-all;
   opacity: 0;
-}
-
-.image-overlay:hover .overlay-div {
-  /* @apply !visible; */
-  opacity: 1;
-  background-color: rgba(22, 14, 14, 0.548);
-
 }
 
 .overlay-div {}

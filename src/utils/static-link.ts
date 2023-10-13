@@ -1,6 +1,6 @@
 export const landingPageFirstSlideImages = [
   {
-    src:"/images/landingPage/5075B-Plus-goku-naruto-01.jpg"
+    src: "/images/landingPage/5075B-Plus-goku-naruto-01.jpg"
   },
   {
     src:"/images/landingPage/akko-3098B-banner-ngang-01.jpg"

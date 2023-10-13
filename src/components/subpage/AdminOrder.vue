@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="text-2xl text-[#8071b3] py-2">
-      Cart Order
+      Accept Order
     </div>
     <div v-if="showTable">
       <div>
@@ -33,20 +33,6 @@
                       class="w-[50px] h-auto"
                     >
                   </template>
-                  <!-- <template v-else-if="col.name == 'Function-button'">
-                    <q-btn
-                      class="!bg-sky-600 text-white mr-1"
-                      @click="updateProductClickHandler(props.row)"
-                    >
-                      Update{{ col.value }}
-                    </q-btn>
-                    <q-btn
-                      class="!bg-red-500 text-white"
-                      @click="deleteProduct(props.row)"
-                    >
-                      Delete
-                    </q-btn>
-                  </template> -->
                   <template v-else-if="col.name == 'Function-button'">
                     <div class="flex items-center justify-center">
                       <q-btn
@@ -142,7 +128,7 @@ const columns = [
   { name: '', label: 'Promote', field: row=>'none', align: 'left' },
   { name: 'Status', label: 'Status', field: row=>row.status, sortable: true, align: 'left', sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
   // { name: 'Order Date', label: 'Order Date', field: row=>row.modifiedDate, sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10), align: 'left' },
-    { name: 'Function-button', label:'Action' ,align:'center'}
+    // { name: 'Function-button', label:'Action' ,align:'center'}
 ] as any
 
 const rows = computed(() => {
@@ -154,7 +140,7 @@ const rows = computed(() => {
 })
 
 const getCart = async () => {
-  const result = await cartRepository.getByInOrder();
+  const result = await cartRepository.getByFinished();
   data.value = result.payload;
 }
 

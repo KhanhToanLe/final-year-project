@@ -27,6 +27,7 @@ export const routes = [
       showMainMenu: true,
       showSidebar: true,
     },
+    
     children: [
       {
         path: "list",
@@ -41,42 +42,79 @@ export const routes = [
         meta: {
           showSortBy: false,
         }
+      },
+      {
+        path:"keyboard",
+        name:"keyboard",
+        component: ProductList,
+        meta: {
+          showSortBy: true,
+        }
+      },
+      {
+        path:"mouse",
+        name:"mouse",
+        component: ProductList,
+        meta: {
+          showSortBy: true,
+        }
+      },
+      {
+        path:"kit-keyboard",
+        name:"kit",
+        component: ProductList,
+        meta: {
+          showSortBy: true,
+        }
+      },
+      {
+        path:"switch",
+        name:"switch",
+        component: ProductList,
+        meta: {
+          showSortBy: true,
+        }
       }
     ]
   },
   {
     path: "/keyboard",
     name: "Keyboards",
+    redirect:{
+      path:"/product/keyboard",
+    },
     meta: {
       show: true,
       showMainMenu: true,
       showSidebar: false
     },
-    component: ProductList
   },
-  {
-    path: "/about",
-    name: "About",
-    meta: {
-      show: true,
-      showMainMenu: true,
-      showSidebar: false,
+  // {
+  //   path: "/about",
+  //   name: "About",
+  //   meta: {
+  //     show: true,
+  //     showMainMenu: true,
+  //     showSidebar: false,
 
-    }
-  },
-  {
-    path: "/news",
-    name: "News",
-    meta: {
-      show: true,
-      showMainMenu: true,
-      showSidebar: false
-    }
-  },
+  //   }
+  // },
+  // {
+  //   path: "/news",
+  //   name: "News",
+  //   meta: {
+  //     show: true,
+  //     showMainMenu: true,
+  //     showSidebar: false
+  //   }
+  // },
 
   {
-    path: "/Kit keyboard",
+    path: "/kit-keyboard",
     name: "Kit Keyboard",
+    redirect:{
+      path:"/product/kit-keyboard",
+    },
     meta: {
       show: true,
       showMainMenu: true,
@@ -87,6 +125,9 @@ export const routes = [
   {
     path: "/mouse",
     name: "Mouse",
+    redirect:{
+      path:"/product/mouse",
+    },
     meta: {
       show: true,
       showMainMenu: true,
@@ -94,18 +135,21 @@ export const routes = [
 
     }
   },
-  {
-    path: "/accessory",
-    name: "Accessory",
-    meta: {
-      show: true,
-      showMainMenu: true,
-      showSidebar: false
-    }
-  },
+  // {
+  //   path: "/accessory",
+  //   name: "Accessory",
+  //   meta: {
+  //     show: true,
+  //     showMainMenu: true,
+  //     showSidebar: false
+  //   }
+  // },
   {
     path: "/switch",
     name: "Switch",
+    redirect:{
+      path:"/product/switch",
+    },
     meta: {
       show: true,
       showMainMenu: true,
@@ -115,6 +159,9 @@ export const routes = [
   {
     path: "/gear",
     name: "Gear",
+    redirect:{
+      path:"/product/switch",
+    },
     meta: {
       show: true,
       showMainMenu: true,
@@ -145,7 +192,7 @@ export const routes = [
     name: "Cart",
     component:CartPage,
     meta: {
-      show: true,
+      show: false,
       showMainMenu: true,
       showSidebar: false
     }
@@ -164,7 +211,7 @@ export const routes = [
     path: "/admin",
     name: "Admin",
     meta: {
-      show: true,
+      show: false,
       showMainMenu: false,
       showSidebar: false
       ,
@@ -182,17 +229,17 @@ export const routes = [
     },
     component: VerifyAccount
   },
-  //  {
-  //   path: "/product-detail/:id",
-  //   name: "Product Detail",
-  //   show: false,
-  //   meta: {
-  //     show: false,
-  //     showMainMenu: false,
-  //     showSidebar: false
-  //   },
-  //   component: ProductDetail
-  // },
+   {
+    path: "/product-detail/:id",
+    name: "Product Detail",
+    show: false,
+    meta: {
+      show: false,
+      showMainMenu: false,
+      showSidebar: false
+    },
+    component: ProductDetail
+  },
   {
     name: "Sign Up",
     path: "/sign-up",

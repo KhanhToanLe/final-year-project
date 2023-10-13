@@ -4,7 +4,7 @@
     <SlideShow
       v-model="firstSlide"
       :items="landingPageFirstSlideImages"
-      :autoplay="false"
+      :autoplay="1000"
       class="!h-[auto]"
     />
     <div class="block-product">
@@ -41,7 +41,7 @@
           :items="keyboardsList"
           :mode="SLIDE_SHOW_MODE.CONTAIN_SLOT"
           height="400"
-          :autoplay="4000"
+          :autoplay="1000"
           :arrows="true"
           :navigation="false"
           control-color="black"
@@ -106,7 +106,7 @@
           :items="mouseList"
           :mode="SLIDE_SHOW_MODE.CONTAIN_SLOT"
           height="400"
-          :autoplay="4000"
+          :autoplay="1000"
           :arrows="true"
           :navigation="false"
           control-color="black"
@@ -149,7 +149,7 @@ const typeList = ref([]);
 onMounted(async () => {
   // get new product
   const result = await productRepository.getNewProduct();
-  newProductList.value = result.payload;
+  newProductList.value = result.payload.slice(0,10);
   console.log(result.payload);
   console.log(newProductList.value);
 
@@ -160,10 +160,10 @@ onMounted(async () => {
 
   // get keyboard list
   // FIX: not fixed type id
-  const keyboardresult = await productRepository.getByType("9dd9b962-25fd-4701-8f2d-0a00c1269194");
-  keyboardsList.value = keyboardresult.payload;
-  const mouseResult = await productRepository.getByType("23d905d6-0c4e-42a0-ade4-2f417258585c")
-  mouseList.value = mouseResult.payload;
+  const keyboardresult = await productRepository.getByType("9ece3d55-2635-48a0-a65b-4f1cd9af95a1");
+  keyboardsList.value = keyboardresult.payload.slice(0,10);
+  const mouseResult = await productRepository.getByType("190c853b-892d-4955-83f3-6c662fd56c9b")
+  mouseList.value = mouseResult.payload.slice(0,10);
 
 
 });

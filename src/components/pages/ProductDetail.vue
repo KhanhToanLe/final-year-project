@@ -180,21 +180,22 @@ const getProduct = async (id) => {
   product.value = result.payload;
 }
 
-const getRelatedProduct = async (keyword) => {
-  const result = await productRepository.getRelated(keyword);
+const getRelatedProduct = async (id) => {
+  const result = await productRepository.getByType(id);
   relatedProductList.value = result.payload;
+  relatedProductList.value = relatedProductList.value.slice(0,8);
 }
 
 const buyProduct = async () => {
-  const result = await cartRepository.getProductByAccount();
-  console.log(result);
+  await addToCart();
+  router.push("/cart");
 }
 
 onMounted(async () => {
   console.log('onmoun');
   const id = router.currentRoute.value.params.id;
   await getProduct(id);
-  getRelatedProduct(product.value.keyword);
+  getRelatedProduct(product.value.typeId);
 
 });
 
@@ -202,7 +203,7 @@ watch(() => route.params.id, async () => {
   console.log('watch');
   const id = router.currentRoute.value.params.id;
   getProduct(id);
-  await getRelatedProduct(product.value.keyword)
+  await getRelatedProduct(product.value.typeId)
 });
 
 </script>

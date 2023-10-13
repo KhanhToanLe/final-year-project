@@ -224,7 +224,7 @@ const imageToLink = (images) => {
 }
 
 .button-link {
-  @apply text-lg text-black h-full p-3 hover:bg-slate-300 transition-all flex items-center justify-center
+  @apply text-lg text-black h-full p-3 hover:bg-slate-300 transition-all flex items-center justify-center mx-5
 }
 
 .menu-icon {

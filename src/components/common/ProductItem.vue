@@ -25,7 +25,7 @@
   </div>
 </template>
 <script setup lang='ts'>
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 const props = defineProps({
   images: {
@@ -60,15 +60,21 @@ const props = defineProps({
 });
 const router = useRouter();
 const productImage = ref();
-const presentImageProduct = ref("");
-onMounted(() => {
+const presentImageProduct = computed(()=>{
   let imageList = props.images.split(",")
   if (imageList.length == 0) {
-    console.log('go here');
-    presentImageProduct.value = "images/logo/10.png";
+    return "images/logo/10.png";
   } else {
-    presentImageProduct.value = `https://localhost:7082/${imageList[0]}`;
+    return `https://localhost:7082/${imageList[0]}`;
   }
+});
+onMounted(() => {
+  // let imageList = props.images.split(",")
+  // if (imageList.length == 0) {
+  //   presentImageProduct.value = "images/logo/10.png";
+  // } else {
+  //   presentImageProduct.value = `https://localhost:7082/${imageList[0]}`;
+  // }
 })
 
 const goToProductDetail = () => {

@@ -4,7 +4,7 @@
   >
     <div class="w-fit">
       <img
-        src="images/login/kitty-cat.jpg"
+        src="images/landingPage/akko-3098B-banner-ngang-01.jpg"
         alt=""
         class="half-screen-image"
       >
@@ -414,7 +414,7 @@
 .half-screen-image{
   width:auto; 
   height:100vh;
-  object-fit: fill;
+  object-fit: cover;
 }
 
 .tab-transition{

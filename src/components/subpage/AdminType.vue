@@ -78,10 +78,11 @@ const addTypeClickHandler = () => {
 }
 const selected = ref();
 
-const backToListHandler = () => {
+const backToListHandler = async() => {
+  console.log('got here');
+  await getAllType();
   showAddType.value = false;
   showTable.value = true;
-  getAllType();
 }
 
 const data = ref([]);

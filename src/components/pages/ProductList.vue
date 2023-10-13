@@ -7,7 +7,10 @@
         v-bind="product"
       />
     </div>
-    <div class="flex justify-center">
+    <div
+      v-if="false"
+      class="flex justify-center"
+    >
       <div class="bg-[#8071b3] text-white round-page-button">
         1
       </div>
@@ -33,7 +36,7 @@
 import SideMenu from 'views/pages/SideMenu.vue';
 import ProductItem from 'components/common/ProductItem.vue';
 import FooterInfo from 'subpage/FooterInfo.vue';
-import { ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 const props = defineProps({
   BreadCrumb: {
@@ -49,75 +52,60 @@ const optionOrder = [
 
 const orderBy = ref(optionOrder[0]);
 
-const productList = ref([
-  {
-    src: 'https://akkogear.com.vn/wp-content/uploads/2023/08/kit-ban-phim-co-monsgeek-m6-qmk-10-247x296.jpg',
-    name: 'Kit bàn phím cơ MonsGeek M6 QMK (Full Nhôm – Mạch xuôi – QMK / VIA – PCB Stab)',
-    alt: 'iimage',
-    price: '2.00đ'
-  },
-  {
-    src: 'https://akkogear.com.vn/wp-content/uploads/2023/08/akko-keycap-set-black-on-white-mda-profile-01-247x296.jpg',
-    name: 'AKKO Keycap set – Black on White (',
-    alt: 'iimage',
-    price: '2.00đ'
-  },
-  {
-    src: 'https://akkogear.com.vn/wp-content/uploads/2023/07/ban-phim-co-akko-3108-rf-world-tour-tokyo-01-247x296.jpg',
-    name: 'Kit bàn phím cơ MonsGeek M6 QMK (Full Nhôm – Mạch xuôi – QMK / VIA – PCB Stab)',
-    alt: 'iimage',
-    price: '2.00đ'
-  },
-  {
-    src: 'https://akkogear.com.vn/wp-content/uploads/2023/07/ban-phim-monsgeek-m1-qmk-pre-built-silver-01-247x296.jpg',
-    name: 'Bàn phím MonsGeek M1 QMK Silver (Full Nhôm – Mạch xuôi – QMK / VIA – RGB – Hotswap)',
-    alt: 'iimage',
-    price: '2.00đ'
-  },
-  {
-    src: 'https://akkogear.com.vn/wp-content/uploads/2023/07/ban-phim-monsgeek-m1-qmk-pre-built-black-01-247x296.jpg',
-    name: 'Bàn phím MonsGeek M1 QMK Black (Full Nhôm – Mạch xuôi – QMK / VIA – RGB – Hotswap)',
-    alt: 'iimage',
-    price: '2.00đ'
-  },
-  {
-    src: 'https://akkogear.com.vn/wp-content/uploads/2023/07/phim-chuot-khong-day-monsgeek-mx108-01-247x296.jpg',
-    name: 'Kit bàn phím cơ MonsGeek M6 QMK (Full Nhôm – Mạch xuôi – QMK / VIA – PCB Stab)',
-    alt: 'iimage',
-    price: '2.00đ'
-  },
-  {
-    src: 'https://akkogear.com.vn/wp-content/uploads/2023/07/chuot-khong-day-monsgeek-d1-01-247x296.jpg',
-    name: 'AKKO Keycap set – Black on White (',
-    alt: 'iimage',
-    price: '2.00đ'
-  },
-  {
-    src: 'https://akkogear.com.vn/wp-content/uploads/2023/07/ban-phim-akko-5108s-naraka-blade-point-03-247x296.jpg',
-    name: 'Kit bàn phím cơ MonsGeek M6 QMK (Full Nhôm – Mạch xuôi – QMK / VIA – PCB Stab)',
-    alt: 'iimage',
-    price: '2.00đ'
-  },
-  {
-    src: 'https://akkogear.com.vn/wp-content/uploads/2021/12/ban-phim-co-akko-3098n-multi-modes-dracula-castle-01-247x296.jpg',
-    name: 'Bàn phím MonsGeek M1 QMK Silver (Full Nhôm – Mạch xuôi – QMK / VIA – RGB – Hotswap)',
-    alt: 'iimage',
-    price: '2.00đ'
-  },
-  {
-    src: 'https://akkogear.com.vn/wp-content/uploads/2023/07/ban-phim-monsgeek-m1-qmk-pre-built-silver-03-247x296.jpg',
-    name: 'Bàn phím MonsGeek M1 QMK Black (Full Nhôm – Mạch xuôi – QMK / VIA – RGB – Hotswap)',
-    alt: 'iimage',
-    price: '2.00đ'
-  },
-  {
-    src: 'https://akkogear.com.vn/wp-content/uploads/2023/07/ban-phim-monsgeek-m1-qmk-pre-built-black-01-247x296.jpg',
-    name: 'Bàn phím MonsGeek M1 QMK Black (Full Nhôm – Mạch xuôi – QMK / VIA – RGB – Hotswap)',
-    alt: 'iimage',
-    price: '2.00đ'
-  }
-])
+const productList = ref([])
+import {useRouter } from 'vue-router';
+import productRepository from 'src/api/repository/productRepository';
+const router = useRouter()
 
+const getProduct = async() =>{
+  const currentRouterName =  router.currentRoute.value.name;
+  console.log(currentRouterName);
+  switch (currentRouterName) {
+    case "keyboard":
+      // eslint-disable-next-line no-case-declarations
+      const keyboardresult =  await productRepository.getByType("9ece3d55-2635-48a0-a65b-4f1cd9af95a1");
+      console.log('go hreer')
+      productList.value = keyboardresult.payload;
+      break;
+    case "mouse":
+      // eslint-disable-next-line no-case-declarations
+      const mouseResult =  await productRepository.getByType("190c853b-892d-4955-83f3-6c662fd56c9b");
+      console.log(productList.value[0]);
+      productList.value = mouseResult.payload;
+      break;
+    case "kit":
+      // eslint-disable-next-line no-case-declarations
+      const kitResult =  await productRepository.getByType("396b2216-9b12-4a17-8310-608ebcbb1faa");
+      productList.value = kitResult.payload;
+      break;
+    case "gear":
+    // eslint-disable-next-line no-case-declarations
+      const gearResult =  await productRepository.getByType("3c6f04c8-e3ab-4e1a-8233-ee37302a4437");
+      productList.value = gearResult.payload;
+      break;
+    case "switch":
+    // eslint-disable-next-line no-case-declarations
+      const switchResult =  await productRepository.getByType("7aa5445d-dbea-4f57-b9e2-19977e7b0b01");
+      productList.value = switchResult.payload;
+      break;
+    case "keycap":
+      // eslint-disable-next-line no-case-declarations
+      const keycapResult =  await productRepository.getByType("92280de8-864d-4ad1-9ab4-8c847b47800e");
+      productList.value = keycapResult.payload;
+      break;
+  
+    default:
+      break;
+  }
+}
+
+watch(() => router.currentRoute.value.name, () => {
+  getProduct();
+});
+
+onMounted(async ()=>{
+  getProduct();
+})
 </script>
 <style scoped lang='scss'>
 .wrapper {

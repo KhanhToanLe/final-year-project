@@ -13,6 +13,14 @@ class CartRepository extends BaseRepository {
     return this.client.get("/");
   }
 
+  getByInOrder(){
+    return this.client.get("/get-in-order");
+  }
+
+  getByFinished(){
+    return this.client.get("/get-finished");
+  }
+
   updateMountProduct(cartId, increaseStep) {
     return this.client.put(`/${cartId}/${increaseStep}`);
   }
@@ -20,6 +28,7 @@ class CartRepository extends BaseRepository {
   updateState(cartId, status, delFlag) {
     return this.client.put(`/${cartId}/${status}/${delFlag}`);
   }
+
 }
 
 export default new CartRepository();
