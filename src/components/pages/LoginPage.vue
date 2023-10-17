@@ -4,7 +4,7 @@
   >
     <div class="w-fit">
       <img
-        src="images/landingPage/akko-3098B-banner-ngang-01.jpg"
+        src="/images/landingPage/akko-3098B-banner-ngang-01.jpg"
         alt=""
         class="half-screen-image"
       >
@@ -155,7 +155,7 @@
               >
                 <template #append>
                   <q-avatar>
-                    <img src="images/login/mc-logo.svg">
+                    <img src="/images/login/mc-logo.svg">
                   </q-avatar>
                 </template>
               </q-input>

@@ -131,7 +131,8 @@
         class="relative h-fit image-overlay"
       >
         <img
-          :src="file.includes(props.updateProduct.id) ? `https://localhost:7082/${file}` : file"
+          :src="file.includes(props.updateProduct[
+            'id']) ? `https://localhost:7082/${file}` : file"
           class="h-[auto]"
           :alt="index.toString()"
           accept="image/*"
@@ -159,31 +160,23 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
-import { toBase64 } from 'utils/common';
+import type {Ref} from 'vue';
+import { toBase64 } from 'src/utils/common';
 import EditorPages from 'tools/EditorPages.vue'
 import productRepository from 'repository/productRepository';
+import type {IProduct} from 'interface/ProductInterface'; 
 import _ from 'lodash';
 
-const props = defineProps({
-  isUpdate: {
-    type: Boolean,
-    required: false,
-    default: false
-  },
-  updateProduct: {
-    required: false,
-    default: () => { },
-  },
-  typeList: {
-    type: Array,
-    required: true,
-    default: () => []
-  }
-});
+const props = defineProps<{
+  isUpdate: Boolean,
 
-const product = ref({
+  updateProduct: IProduct
+  typeList:Array<any>
+}>();
+
+const product:Ref<IProduct> = ref({
   name: '',
   vietnameseName: "",
   code: "",
@@ -191,9 +184,10 @@ const product = ref({
   keyword: "",
   guarantee: 0,
   description: "",
-  images: null,
+  images: "",
   type: "",
   mounts:0
+
 });
 
 const updateImageHandler = () => {
@@ -226,7 +220,7 @@ const productImageHandler = async (event) => {
 }
 
 const deleteImage = (file, index) => {
-  if (file.includes(props.updateProduct.id)) {
+  if (file.includes(props.updateProduct["id"])) {
     updateImageList.value.splice(index, 1);
   } else {
     productImageList.value.splice(index - updateImageList.value.length, 1);
@@ -254,7 +248,9 @@ const clearProductHandler = () => {
     keyword: "",
     guarantee: 0,
     description: "",
-    images: null,
+    images: "",
+    type: "",
+    mounts:0
   };
   productImageList.value = [];
   descriptionEditor.value?.clearText();
@@ -269,8 +265,7 @@ onMounted(() => {
   if (props.isUpdate) {
     product.value = props.updateProduct;
     descriptionEditor.value.setText(product.value.description);
-    updateImageList.value = product.value.images.split(",");
-
+    updateImageList.value = product.value["images"].split(",");
   }
   product.value.type = props.typeList[0];
 })

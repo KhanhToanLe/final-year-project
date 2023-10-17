@@ -72,7 +72,6 @@
           <CIcon
             icon="Delete"
             class="text-white !text-[34px] p-4"
-            @click="deleteImage(file, index)"
           />
         </div>
       </div>
@@ -80,7 +79,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
 import typeRepository from 'repository/typeRepository';
 import { toBase64 } from 'utils/common';
@@ -100,8 +99,7 @@ const backToList = () => {
 const saveType = async () => {
   // call api to save
   const typeValue = type.value;
-  typeValue.images = typeImageList.value;
-  console.log(typeValue.images);
+  typeValue["images"] = typeImageList.value;
   await typeRepository.add(typeValue);
   clearTypeHandler();
   emits("changeToList");

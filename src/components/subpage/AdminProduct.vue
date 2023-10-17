@@ -74,7 +74,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import type { IProduct } from 'interface/ProductInterface';
+import { Ref, computed, onMounted, ref } from 'vue';
 import _ from 'lodash';
 import AddProduct from 'subcomponent/AddProduct.vue';
 import productRepository from 'api/productRepository';
@@ -84,7 +85,7 @@ import typeRepository from 'api/typeRepository';
 const showTable = ref(true);
 const showAddProduct = ref(false);
 const isUpdate = ref(false);
-const modifiedProduct = ref({});
+const modifiedProduct: Ref<IProduct> = ref();
 const productType = ref([]);
 
 const addProductClickHandler = () => {

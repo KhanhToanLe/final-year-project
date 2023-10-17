@@ -4,10 +4,11 @@
     "src/**/*.vue",
     "src/**/**/*.vue",
     "components.d.ts",
-    "src/**/*.*"
+    "src/**/*.ts"
   ],
   "exclude": [
-    "src/**/__tests__/*"
+    "src/**/__tests__/*",
+    "node_modules"
   ],
   "compilerOptions": {
     "target": "ESNext",
@@ -21,9 +22,7 @@
       "views/*": [
         "./src/views/*"
       ],
-      "src/*": [
-        "./src/*"
-      ],
+      
       "pages/*": [
         "./src/components/pages/*"
       ],
@@ -60,8 +59,14 @@
       "tools/*": [
         "./src/components/tools/*"
       ],
+      "interface/*":[
+        "./src/interface/*"
+      ],
       "api/*": [
         "./src/api/repository/*"
+      ],
+      "src/*": [
+        "./src/*"
       ],
       "@/*": [
         "./*"

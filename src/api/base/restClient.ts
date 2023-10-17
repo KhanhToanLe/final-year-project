@@ -47,7 +47,8 @@ export default class RestClient {
 
     if (config.headers) {
       if(cookies.get('token')  !== null){
-        config.headers.Authorization = `Bearer ${cookies.get('token').token}`;
+        var tokenObj = cookies.get("token") as Object;
+        config.headers.Authorization = `Bearer ${tokenObj["token"]}`;
       }
     }
     // do something here before request

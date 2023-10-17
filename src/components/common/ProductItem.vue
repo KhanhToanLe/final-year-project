@@ -94,4 +94,6 @@ const goToProductDetail = () => {
 .product-info {
   @apply h-[90px]
 }
+
+
 </style>

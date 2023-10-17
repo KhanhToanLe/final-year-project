@@ -67,7 +67,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { Ref, computed, onMounted, ref } from 'vue';
+import type { IProduct } from 'src/interface/ProductInterface';
 import _ from 'lodash';
 import AddProduct from 'subcomponent/AddProduct.vue';
 import productRepository from 'api/productRepository';
@@ -78,7 +79,7 @@ import cartRepository from 'src/api/repository/cartRepository';
 const showTable = ref(true);
 const showAddProduct = ref(false);
 const isUpdate = ref(false);
-const modifiedProduct = ref({});
+const modifiedProduct: Ref<IProduct> = ref();
 const productType = ref([]);
 
 let accountContain = [];

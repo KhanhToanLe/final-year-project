@@ -39,16 +39,16 @@
       <div class="flex-1">
         <div>HOME / PRODUCT</div>
         <div class="text-black text-2xl pb-2">
-          {{ product.name }}
+          {{ product["name"] }}
         </div>
         <div class="text-red-500 text-xl font-bold">
-          {{ product.price }} USD
+          {{ product["price"] }} USD
         </div>
         <div class="border-t-[1px] mt-4 text-black">
-          <span class="text-gray-400">Code</span>: {{ product.code }}
+          <span class="text-gray-400">Code</span>: {{ product["code"] }}
         </div>
         <div class="border-t-[1px] mt-4 text-black">
-          <span class="text-gray-400">Keyword</span>: {{ product.keyword }}
+          <span class="text-gray-400">Keyword</span>: {{ product["keyword"] }}
         </div>
         <div class="flex pt-10 justify-between">
           <QBtn
@@ -95,7 +95,7 @@
           name="Description"
           class="text-black"
         >
-          <div v-html="product.description" />
+          <div v-html="product['description']" />
         </q-tab-panel>
         <q-tab-panel name="Other">
           <div class="text-black py-3 border-b flex justify-between">
@@ -103,7 +103,7 @@
               Gurantee
             </div>
             <div class="flex-1 text-left">
-              {{ product.guarantee }} Month<span v-if="product.gurantee == 1">s</span>
+              {{ product["guarantee"] }} Month<span v-if="product['guarantee'] == 1">s</span>
             </div>
           </div>
         </q-tab-panel>
@@ -167,7 +167,7 @@ const product = ref({
 });
 
 const addToCart = async () => {
-  const currentProductId = product.value.id;
+  const currentProductId = product.value["id"];
   const result = await cartRepository.addToCart(currentProductId, 1);
   if (!result.payload) {
     router.push("/login");
@@ -195,7 +195,7 @@ onMounted(async () => {
   console.log('onmoun');
   const id = router.currentRoute.value.params.id;
   await getProduct(id);
-  getRelatedProduct(product.value.typeId);
+  getRelatedProduct(product.value["typeId"]);
 
 });
 
@@ -203,7 +203,7 @@ watch(() => route.params.id, async () => {
   console.log('watch');
   const id = router.currentRoute.value.params.id;
   getProduct(id);
-  await getRelatedProduct(product.value.typeId)
+  await getRelatedProduct(product.value["typeId"])
 });
 
 </script>
