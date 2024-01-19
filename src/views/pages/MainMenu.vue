@@ -2,18 +2,13 @@
   <div class="wrapper">
     <div class="main-container">
       <div class="flex justify-center h-auto">
-        <img
-          v-if="toggleLogo"
-          src="/images/logo/10.png"
-          alt="logo image"
-          class="w-[100px] h-[80px] object-cover"
-        >
-        <img
-          v-else
-          src="/images/logo/11.png"
-          alt="logo image"
-          class="w-[100px] h-[80px] object-cover"
-        >
+        <a href="/">
+          <img
+            src="/images/logo/logo-akkogear.png"
+            alt="logo image"
+            class=""
+          >
+        </a>
       </div>
       <div class="pl-4">
         <template
@@ -34,7 +29,7 @@
         <div class="menu-icon">
           <CIcon
             icon="Shopping Cart"
-            class="w-12 !text-lg text-center"
+            class="w-12 !text-xl text-center"
             @mouseenter="cartDropdown = true"
             @mouseleave="cartDropdown = false"
             @click="gotoCartDetail"
@@ -47,7 +42,7 @@
         >
           <div class="">
             <div class="">
-              <template v-if="productCart.length != 0">
+              <template v-if="productCart && productCart.length != 0">
                 <div
                   v-for="product in productCart"
                   :key="product.toString()"
@@ -78,19 +73,32 @@
           </div>
         </q-btn-dropdown>
         <div class="menu-icon">
-          <CIcon
-            icon="Search"
-            class="w-12 !text-lg text-center"
-          />
+          <div
+            v-if="props.currentUser != null"
+            class=""
+            @click="getUserInformation()"
+          >
+            <img
+              v-if="props.currentUser.avatar"
+              class="avatar-icon"
+              :src="props.currentUser.avatar"
+              alt=""
+            >
+            <img
+              v-else
+              class="avatar-icon"
+              src="/images/login/default-avatar.jpg"
+              alt=""
+            >
+          </div>
+          <div v-else>
+            <CIcon
+              icon="Person"
+              class="w-12 !text-2xl text-center"
+              @click="()=>{router.push('/login')}"
+            />
+          </div>
         </div>
-        <div class="menu-icon">
-          <CIcon
-            icon="Person"
-            class="w-12 !text-lg text-center"
-            @click="dropdown = !dropdown"
-          />
-        </div>
-
         <q-btn-dropdown
           v-model="dropdown"
           color="primary"
@@ -108,6 +116,23 @@
                     <CIcon icon="Info" />
                     <span class="w-[120px] pl-2 ">
                       Information
+                    </span>
+                  </div>
+                </q-item-label>
+              </q-item-section>
+            </q-item>
+
+            <q-item
+              v-close-popup
+              clickable
+              @click="changePasswordClickHandler()"
+            >
+              <q-item-section>
+                <q-item-label>
+                  <div class="flex">
+                    <CIcon icon="Info" />
+                    <span class="w-[120px] pl-2 ">
+                      Đổi Password
                     </span>
                   </div>
                 </q-item-label>
@@ -153,23 +178,21 @@ const routes = router.getRoutes();
 const dialog = useDialogStore();
 const { cookies } = useCookies();
 
+const props = defineProps({
+  currentUser:{
+    type:Object
+  }
+});
+
 const cartDropdown = ref(false);
 const toggleLogo = ref(false);
 const dropdown = ref(false);
 const informationClickHandler = () => {
-
-  const result = accountRepository.getMe();
-  console.log(result);
-  dialog.show({
-    type: "message",
-    header: "Attention",
-    message: "This Module Is Currently Under Development"
-  })
+  router.push('/user')
 }
 const productCart = ref([]);
 
 const getProductCart = async () => {
-  console.log('go here')
   const result = await cartRepository.getProductByAccount();
   productCart.value = result.payload;
 }
@@ -188,6 +211,11 @@ const gotoCartDetail = () => {
   router.push("/cart");
 }
 
+const changePasswordClickHandler = () =>{
+  console.log('test');
+  router.push('/password');
+}
+ 
 onMounted(() => {
   setInterval(() => {
     toggleLogo.value = !toggleLogo.value
@@ -199,7 +227,10 @@ const imageToLink = (images) => {
   if (images) {
     return `https://localhost:7082/${images.split(",")[0].trim()}`;
   }
+}
 
+const  getUserInformation = async () =>{
+  dropdown.value = true;
 }
 </script>
 
@@ -224,7 +255,7 @@ const imageToLink = (images) => {
 }
 
 .button-link {
-  @apply text-lg text-black h-full p-3 hover:bg-slate-300 transition-all flex items-center justify-center mx-5
+  @apply text-lg text-black h-full py-3 px-7 hover:bg-slate-300 transition-all flex items-center justify-center 
 }
 
 .menu-icon {
@@ -237,6 +268,10 @@ const imageToLink = (images) => {
   padding: 0;
   margin: 0;
   visibility: hidden;
+}
 
+.avatar-icon{
+  object-fit: cover;
+  @apply w-[30px] h-[30px] rounded-full
 }
 </style>

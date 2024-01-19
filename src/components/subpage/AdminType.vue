@@ -3,7 +3,7 @@
     <div v-if="showTable">
       <div class="pb-3">
         <q-btn @click="addTypeClickHandler">
-          Add Type
+          Thêm Phân loại
         </q-btn>
       </div>
       <div>
@@ -16,9 +16,11 @@
           row-key="name"
           class="!h-full"
           selection="multiple"
+          rows-per-page-label="Bản ghi mỗi trang"
+          :pagination-label="getPagingText"
         >
           <template #header-selection="scope">
-            Images 
+            Ảnh
           </template>
           <template #body="props">
             <q-tr :props="props">
@@ -26,10 +28,16 @@
                 <div class="text-center flex justify-center items-center">
                   <template v-if="col.name == 'Function-button'">
                     <q-btn
+                      class="!bg-sky-600 text-white mr-4"
+                      @click="UpdateType(props.row)"
+                    >
+                      Chỉnh Sửa
+                    </q-btn>
+                    <q-btn
                       class="!bg-red-500 text-white"
                       @click="deleteType(props.row)"
                     >
-                      Delete
+                      Xóa
                     </q-btn>
                   </template>
                   <template v-else-if="col.name == 'Images'">
@@ -56,6 +64,8 @@
     </div>
     <AddType
       v-if="showAddType"
+      :is-update="isUpdate"
+      :update-type="modifiedType"
       @changeToList="backToListHandler"
     />
   </div>
@@ -67,22 +77,30 @@ import _ from 'lodash';
 import AddType from 'subcomponent/AddType.vue';
 import productRepository from 'api/productRepository';
 import typeRepository from 'api/typeRepository';
+import { isUpdateExpression } from '@babel/types';
+import { useDialogStore } from 'src/stores/dialog';
+import { DIALOG_TYPE } from 'common/enum';
+
+
+const isUpdate = ref(false);
 
 const showTable = ref(true);
 const showAddType = ref(false);
+const modifiedType = ref({});
+const dialog = useDialogStore();
 
 
 const addTypeClickHandler = () => {
+  isUpdate.value = false;
   showAddType.value = true;
   showTable.value = false;
 }
 const selected = ref();
 
 const backToListHandler = async() => {
-  console.log('got here');
-  await getAllType();
   showAddType.value = false;
   showTable.value = true;
+  await getAllType();
 }
 
 const data = ref([]);
@@ -91,12 +109,12 @@ const columns = [
   {
     name: 'Images',
     required: true,
-    label: 'Name',
+    label: 'Tên Phân Loại',
     align: 'center',
     field: 'images',
   },
-  { name: 'Name', align: 'center', label: 'Action', field: 'name' },
-  { name: 'Function-button', align: 'center', label: 'Show Lading Page'},
+  { name: 'Name', align: 'center', label: 'Khác', field: 'name' },
+  { name: 'Function-button', align: 'center', label: 'Cờ Hiện Thị Ở Landing Page'},
   
 ] as any
 
@@ -114,10 +132,15 @@ const getAllType = async () => {
 }
 
 const deleteType = async (type) => {
-  // console.log(product.id);
-  const result = await  typeRepository.delete(type.id);
-  // console.log(result);
-  getAllType();
+
+  const value = await dialog.show({
+    type:DIALOG_TYPE.CONFIRM,
+    header:'Thông Tin',
+    message:"Bạn có muốn xóa phân loại sản phẩm này không?",
+  },async()=>{
+    await typeRepository.delete(type.id);
+    getAllType();
+  });
 
 }
 
@@ -132,7 +155,17 @@ const imageToLink = (images) => {
   if (images) {
     return `https://localhost:7082/${images.split(",")[0].trim()}`;
   }
+}
 
+const getPagingText = (first,end,total) =>{
+  return first + "-" + end + " trên " + total + " Bản ghi";
+}
+
+const UpdateType = (type) =>{
+  modifiedType.value = type; 
+  isUpdate.value = true;
+  showAddType.value = true;
+  showTable.value = false;
 }
 
 const changeEvent = async(id,isShow) =>{

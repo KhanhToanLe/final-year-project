@@ -5,7 +5,7 @@
     :class="props.class"
     @click="goToProductDetail"
   >
-    <div class="border m-1 h-full flex flex-col flex-auto !flex-nowrap">
+    <div class="border h-full flex flex-col flex-auto !flex-nowrap">
       <div class="product-image w-[100%] flex items-center justify-center overflow-hidden  flex-auto">
         <img
           :src="presentImageProduct"
@@ -78,7 +78,6 @@ onMounted(() => {
 })
 
 const goToProductDetail = () => {
-  console.log(props.id);
   router.push({ path: `/product/detail/${props.id}` })
 }
 </script>

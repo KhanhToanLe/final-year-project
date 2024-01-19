@@ -533,7 +533,6 @@ const chooseTab = (index) =>{
     if(!isExpandBefore.value){
       isExpandBefore.value = true;
     }else if(isExpandBefore.value){
-      console.log('go here');
       expandTransitionName.value =  'expand'
     }
   })

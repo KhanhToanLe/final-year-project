@@ -67,6 +67,7 @@ const dialogStore = useDialogStore();
       });
     }else{
       isError.value = false;
+      isSuccess.value = true;
       dialogStore.show({
         type:DIALOG_TYPE.MESSAGE,
         header:"Success",

@@ -1,17 +1,14 @@
 <template>
   <div class="wrapper select-none">
     <div class="text-xl pb-4">
-      Giỏ Hàng
+      Thanh Toán
     </div>
     <div class="">
-      <div class="grid grid-cols-12 gap-2 h-[60px] bg-slate-200 border">
-        <div class="col-span-1 col-center">
-          #
-        </div>
+      <div class="grid grid-cols-10 gap-2 h-[60px] bg-slate-200 border">
         <div class="col-span-1 col-center h-[inherit]">
           Ảnh
         </div>
-        <div class="col-span-5 col-center !justify-start">
+        <div class="col-span-4 col-center justify-center">
           Tên Sản Phẩm
         </div>
         <div class="col-span-1 col-center">
@@ -23,91 +20,77 @@
         <div class="col-span-1 col-center">
           Tổng
         </div>
-        <div class="col-span-1 col-center">
-          Khác
-        </div>
       </div>
-      <div
+      <template 
         v-for="item in productList"
         :key="item.id"
-        class="grid grid-cols-12 gap-2 h-[100px] border border-t-0 text-black"
       >
-        <div class="col-span-1 col-center">
-          <q-checkbox
-            v-model="item.selected"
-            :val="item.id"
-            @update:model-value="changeSelectCart(item.id)"
-          />
-        </div>
         <div
-          class="col-span-1 col-center "
-          :class="[{ 'opacity-60': !item.selected }]"
+          v-if="item.selected"
+          class="grid grid-cols-10 gap-2 h-[100px] border border-t-0 text-black"
         >
-          <img
-            :src="imageToLink(item.product.images)"
-            alt=""
-            class="w-[100px] h-[100px] p-1 object-cover"
+          <div
+            class="col-span-1 col-center "
+            :class="[{ 'opacity-60': !item.selected }]"
           >
-        </div>
-        <div
-          class="col-span-5 col-center !justify-start"
-          :class="[{ 'opacity-60': !item.selected }]"
-        >
-          {{ item.product.name }}
-        </div>
-        <div
-          class="col-span-1 col-center text-red-500 font-semibold"
-          :class="[{ '!text-gray-400': !item.selected }]"
-        >
-          {{ item.product.price }} ₫
-        </div>
-        <div class="col-span-2 col-center">
-          <div class="">
-            <div
-              class="flex"
-              :class="[{ 'disabled': !item.selected }]"
+            <img
+              :src="imageToLink(item.product.images)"
+              alt=""
+              class="w-[100px] h-[100px] p-1 object-cover"
             >
+          </div>
+          <div
+            class="col-span-4 col-center !justify-start"
+            :class="[{ 'opacity-60': !item.selected }]"
+          >
+            {{ item.product.name }}
+          </div>
+          <div
+            class="col-span-1 col-center text-red-500 font-semibold"
+            :class="[{ '!text-gray-400': !item.selected }]"
+          >
+            {{ item.product.price }} ₫
+          </div>
+          <div class="col-span-2 col-center">
+            <div class="">
               <div
-                class="flex items-center justify-center w-8 h-8 bg-slate-200"
-                @click="down(item.id)"
+                class="flex"
+                :class="[{ 'disabled': !item.selected }]"
               >
-                <CIcon
-                  icon="Remove"
-                  class="!text-lg"
-                />
-              </div>
+                <div
+                  class="flex items-center justify-center w-8 h-8 bg-slate-200 opacity-50"
+                >
+                  <CIcon
+                    icon="Remove"
+                    class="!text-lg"
+                  />
+                </div>
 
-              <div class="flex justify-center items-center w-8 h-8 border">
-                <span>
-                  {{ item.mount }}
-                </span>
+                <div class="flex justify-center items-center w-8 h-8 border">
+                  <span>
+                    {{ item.mount }}
+                  </span>
+                </div>
+                <div
+                  class="flex items-center justify-center w-8 h-8 bg-slate-200 opacity-50"
+                >
+                  <CIcon
+                    icon="Add"
+                    class="!text-lg"
+                  />
+                </div>
               </div>
-              <div
-                class="flex items-center justify-center w-8 h-8 bg-slate-200"
-                @click="up(item.id)"
-              >
-                <CIcon
-                  icon="Add"
-                  class="!text-lg"
-                />
-              </div>
+              <span class="text-xs mt-1 block">{{ item.product.mounts }} left in container</span>
             </div>
-            <span class="text-xs mt-1 block">{{ item.product.mounts }} left in container</span>
+          </div>
+          <div
+            class="col-span-1 col-center text-red-500 font-semibold"
+            :class="[{ '!text-gray-400': !item.selected }]"
+          >
+            {{ item.mount * item.product.price }} ₫
           </div>
         </div>
-        <div
-          class="col-span-1 col-center text-red-500 font-semibold"
-          :class="[{ '!text-gray-400': !item.selected }]"
-        >
-          {{ item.mount * item.product.price }} ₫
-        </div>
-        <div
-          class="col-span-1 col-center delete-text"
-          @click="deleteItem(item.id)"
-        >
-          Delete
-        </div>
-      </div>
+      </template>
     </div>
     <div class="mt-8 flex">
       <!-- TODO : coupon feature -->
@@ -169,16 +152,18 @@
 import { computed, onMounted, ref } from 'vue';
 import cartRepository from 'api/cartRepository';
 import { useDialogStore } from 'src/stores/dialog';
-import { watch } from 'fs';
 const productList = ref([]);
 const coupon = ref("");
 const totalSavedCouponPrice = ref(0);
 const recentCouponCode = ref('D2SDA');
 import { DIALOG_TYPE } from 'src/common/enum';
-const dialog = useDialogStore();
 import {useRouter} from 'vue-router';
+const dialog = useDialogStore();
 const router = useRouter();
 
+const props = defineProps([
+  'orderProducts'
+]);
 const selectedProduct = ref([]);
 const getCartProduct = async () => {
   const result = await cartRepository.getProductByAccount();
@@ -214,16 +199,11 @@ const imageToLink = (images) => {
 const up = async (id) => {
   await cartRepository.updateMountProduct(id, 1);
   getCartProduct();
-  // productList.value.find(c=>c.id == id).mount++;
 }
 
 const down = async (id) => {
   await cartRepository.updateMountProduct(id, -1);
   getCartProduct();
-  // var theProduct = productList.value.find(c=>c.id == id);
-  // if(theProduct.mount !== 0){
-  //   productList.value.find(c=>c.id == id).mount--;
-  // }
 }
 
 const changeSelectCart = (cartId) =>{
@@ -231,13 +211,12 @@ const changeSelectCart = (cartId) =>{
 }
 
 const purchase = async () => {
-  router.push("/payment");
-  // for (var cart of productList.value) {
-  //   if(cart.selected){
-  //     await cartRepository.updateState(cart.id, "InOrder", true);
-  //   }
-  // }
-  // getCartProduct();
+  for (var cart of productList.value) {
+    if(cart.selected){
+      await cartRepository.updateState(cart.id, "InOrder", true);
+    }
+  }
+  getCartProduct();
 }
 
 const deleteItem = async (cartId) =>{

@@ -3,7 +3,6 @@ import {routes} from 'src/router/routes';
 const router = createRouter({
   scrollBehavior(to, from, savedPosition) {
     // always scroll to top
-    console.log(savedPosition);
     return { el: to.hash,left:0, top: 0}
     // return {x:0,y:0}
   },

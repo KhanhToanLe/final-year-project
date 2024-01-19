@@ -17,8 +17,8 @@ class ProductRepository extends BaseRepository {
     return this.client.get("/get-new");
   }
 
-  getByType(typeId) {
-    return this.client.get(`/get-by-type/${typeId}`);
+  getByType(typeId,quantity,page) {
+    return this.client.get(`/get-by-type/${typeId}/${quantity}/${page}`);
   }
 
   getById(id) {
@@ -28,8 +28,6 @@ class ProductRepository extends BaseRepository {
   getRelated(keyword) {
     return this.client.get(`/get-related/${keyword}`)
   }
-
- 
 
   update(product) {
     return this.client.put("/", product)
@@ -41,6 +39,10 @@ class ProductRepository extends BaseRepository {
 
   deleteRange(guids) {
     return this.client.post("/delete", guids);
+  }
+
+  getByQuantity(quantity){
+    return this.client.post(`/newest/${quantity}`);
   }
 
 }

@@ -21,6 +21,14 @@ class AccountRepository extends BaseRepository {
     return this.client.get("/get-me");
   }
 
+  update(user){
+    return this.client.put("/",user);
+  }
+  
+  changePassword(Password){
+    return this.client.put('/password',Password);
+  }
+
 }
 
 export default new AccountRepository();

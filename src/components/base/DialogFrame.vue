@@ -32,7 +32,7 @@
                 </q-btn>
               </template>
               <template v-if="item.type== DIALOG_TYPE.MESSAGE">
-                <q-btn @click="dialog.hide()">
+                <q-btn @click="()=>{dialog.callbackFunc();dialog.hide();}">
                   OK
                 </q-btn>
               </template>
@@ -54,6 +54,7 @@ const dialog = useDialogStore();
 const dialogs = ref(dialog.dialog)
 
 const okClickHandler = () =>{
+  dialog.callbackFunc();
   dialog.hide();
 }
 </script>

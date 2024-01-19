@@ -3,7 +3,8 @@
     <div class="font-extrabold text-xl pb-4 flex">
       <div>
         <div class="mb-3">
-          <span>Add Type</span>
+          <span v-if="!props.isUpdate">Thêm Phân Loại</span>
+          <span v-else>Chỉnh Sửa Phân Loại</span>
         </div>
         <div class="">
           <q-btn
@@ -11,7 +12,7 @@
             @click="backToList"
           >
             <CIcon icon="Arrow Back" />
-            Go back
+            Về Danh Sách
           </q-btn>
         </div>
       </div>
@@ -19,15 +20,15 @@
       <div class="ml-[auto]">
         <q-btn
           class="!bg-green-600 text-white mr-4"
-          @click="saveType()"
+          @click="() => props.isUpdate ? updateTypeHandler() : saveType()"
         >
-          &nbsp;Save&nbsp;
+          &nbsp;Lưu&nbsp;
         </q-btn>
         <q-btn
           class="!bg-slate-20"
           @click="clearTypeHandler"
         >
-          Clear
+          Làm Mới
         </q-btn>
       </div>
     </div>
@@ -35,7 +36,7 @@
       <q-input
         v-model="type.name"
         outlined
-        label="Name"
+        label="Tên Phân Loại"
         class="w-full"
         dense
       />
@@ -46,7 +47,7 @@
         :disable="typeImageList.length > 0"
         @click="inputFileClickHandler"
       >
-        Add Image
+        Thêm Ảnh
       </q-btn>
       <input
         ref="typeImage"
@@ -58,13 +59,14 @@
     </div>
     <div class="border w-full min-h-[200px] border-[#c2c2c2] my-2 rounded-md grid grid-cols-4 gap-4 p-2">
       <div
-        v-for="(file, index) in typeImageList"
+        v-for="(file, index) in allImage"
         :key="index"
-        class="relative h-auto image-overlay"
+        class="relative h-fit image-overlay"
       >
         <img
-          :src="file"
-          class="h-[auto] object-cover w-auto"
+          :src="props.updateType!=null && file.includes(props.updateType[
+            'id']) ? `https://localhost:7082/${file}` : file"
+          class="h-[auto]"
           :alt="index.toString()"
           accept="image/*"
         >
@@ -72,6 +74,7 @@
           <CIcon
             icon="Delete"
             class="text-white !text-[34px] p-4"
+            @click="deleteImage(file, index)"
           />
         </div>
       </div>
@@ -80,17 +83,45 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import typeRepository from 'repository/typeRepository';
 import { toBase64 } from 'utils/common';
+const props = defineProps(["isUpdate","updateType"])
+import { useDialogStore } from 'src/stores/dialog';
+import { DIALOG_TYPE } from 'common/enum';
 
+const dialog = useDialogStore();
 
 const type = ref({
   name: '',
 });
 
-const emits = defineEmits(["changeToList"]);
 
+const allImage = computed(() => {
+  const value = updateImageList.value?.concat(typeImageList.value);
+  return value
+})
+
+const emits = defineEmits(["changeToList"]);
+const updateImageList = ref([]);
+
+const updateTypeHandler = async () =>{
+  const result = await typeRepository.update(
+    {
+      type:type.value,
+      images:allImage.value
+    });
+  if(result.payload){
+    dialog.show({
+      type:DIALOG_TYPE.MESSAGE,
+      header:'Thành Công',
+      message:"Lưu thay đổi thành công",
+    },()=>{
+      clearTypeHandler();
+    emits("changeToList");
+    });
+  }
+}
 
 const backToList = () => {
   emits("changeToList");
@@ -98,13 +129,23 @@ const backToList = () => {
 
 const saveType = async () => {
   // call api to save
-  const typeValue = type.value;
+  const typeValue = {};
+  typeValue['type'] = type.value;
   typeValue["images"] = typeImageList.value;
-  await typeRepository.add(typeValue);
-  clearTypeHandler();
-  emits("changeToList");
+  const result = await typeRepository.add(typeValue);
+  if(result.payload){
+    await dialog.show({
+    type:DIALOG_TYPE.MESSAGE,
+    header:'Thành Công',
+    message:"Thêm mới thành công",
+  },()=>{
+    clearTypeHandler();
+    emits("changeToList");
+  });
 
+  }
 }
+
 const clearTypeHandler = () => {
   type.value = {
     name: '',
@@ -126,6 +167,22 @@ const typeImageHandler = async (event) => {
   event.target.value = null;
 }
 
+const deleteImage = (file,index) =>{
+  if (file.includes(props.updateType["id"])) {
+    updateImageList.value.splice(index, 1);
+  } else {
+    typeImageList.value.splice(index - updateImageList.value.length, 1);
+  }
+}
+
+onMounted(() => {
+  if (props.isUpdate) {
+    type.value = props.updateType;
+    updateImageList.value = type.value["images"].split(",");
+  }
+
+})
+
 </script>
 
 <style scoped>
@@ -138,5 +195,9 @@ const typeImageHandler = async (event) => {
   opacity: 0;
 }
 
-.overlay-div {}
+.image-overlay:hover .overlay-div {
+    opacity: 1;
+    background-color: rgba(22, 14, 14, 0.548);
+}
+
 </style>

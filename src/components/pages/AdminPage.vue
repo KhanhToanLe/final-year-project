@@ -9,7 +9,7 @@
       <q-drawer
         v-model="drawer"
         show-if-above
-        :width="200"
+        :width="220"
         :breakpoint="500"
         bordered
       >
@@ -59,6 +59,7 @@ import { useRouter } from 'vue-router';
 import AdminLandingPageSideShow from 'subpage/AdminLandingPageSideShow.vue';
 import AdminCart from 'subpage/AdminCart.vue'
 import AdminOrder from 'subpage/AdminOrder.vue';
+import AdminNews from 'subpage/AdminNews.vue'
 
 const router = useRouter();
 
@@ -66,56 +67,63 @@ const drawer = ref(false);
 const menuList = [
   {
     icon: 'inbox',
-    label: 'Go To Page',
+    label: 'Trang chủ',
     separator: true
-
   },
   {
     icon: 'send',
-    label: 'Product Type',
+    label: 'Phân loại Sản Phẩm',
     separator: false,
     component: AdminType
   },
   {
     icon: "category",
-    label: "Product",
+    label: "Sản Phẩm",
     separator: false,
     component: AdminProduct
   },
+  // {
+  //   icon: 'delete',
+  //   label: 'Cài Đặt Trang Chủ',
+  //   separator: false,
+  //   component: AdminLandingPageSideShow
+
+  // },
   {
-    icon: 'delete',
-    label: 'Slide Show',
+    icon: 'style',
+    label: 'Tin Tức',
     separator: false,
-    component: AdminLandingPageSideShow
+    component: AdminNews
 
   },
   {
     icon: 'error',
-    label: 'Cart',
+    label: 'Đơn Đã Đặt',
     separator: true,
     component: AdminCart
   },
   {
     icon: 'print',
-    label: 'Order',
+    label: 'Đơn Đặt Hàng',
     component: AdminOrder
   },
+
   {
     icon: 'settings',
-    label: 'Settings',
+    label: 'Cài đặt',
     separator: false
   },
-  {
-    icon: 'feedback',
-    label: 'Send Feedback',
-    separator: false
-  },
-  {
-    icon: 'help',
-    iconColor: 'primary',
-    label: 'Help',
-    separator: false
-  }
+  // {
+  //   icon: 'feedback',
+  //   label: 'Send Feedback',
+  //   separator: false
+  // },
+  // {
+  //   icon: 'help',
+  //   iconColor: 'primary',
+  //   label: 'Help',
+  //   separator: false
+  // }
 ]
 
 const selectedMenu = ref(menuList[0]);

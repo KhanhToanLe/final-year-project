@@ -20,8 +20,7 @@ onMounted(()=>{
 
   signalr.on('MessageReceived', ( user,message) => {
     /* do stuff */
-    console.log(user);
-    console.log(message);
+ 
   });
 })
 const SendMessage = ()=>{

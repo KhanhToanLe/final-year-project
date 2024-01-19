@@ -37,37 +37,37 @@
         </q-carousel>
       </div>
       <div class="flex-1">
-        <div>HOME / PRODUCT</div>
+        <div>Trang Chủ / Sản Phẩm</div>
         <div class="text-black text-2xl pb-2">
           {{ product["name"] }}
         </div>
         <div class="text-red-500 text-xl font-bold">
-          {{ product["price"] }} USD
+          {{ product["price"] }}₫
+        </div>
+        <div class="border-t-[1px] mt-4 text-black ">
+          <span class="text-gray-400">Mã Sản Phẩm</span>: {{ product["code"] }}
         </div>
         <div class="border-t-[1px] mt-4 text-black">
-          <span class="text-gray-400">Code</span>: {{ product["code"] }}
-        </div>
-        <div class="border-t-[1px] mt-4 text-black">
-          <span class="text-gray-400">Keyword</span>: {{ product["keyword"] }}
+          <span class="text-gray-400">Từ khóa</span>: {{ product["keyword"] }}
         </div>
         <div class="flex pt-10 justify-between">
           <QBtn
             class="!border-[#8071b3] !w-[212px] !py-4 !m-2"
             @click="addToCart"
           >
-            Add To Card
+            Thêm vào giỏ hàng
           </QBtn>
           <QBtn
             class=" text-white !bg-[#8071b3] !w-[212px] !py-4 !m-2"
             @click="buyProduct"
           >
-            Buy
+            Mua
           </QBtn>
           <div />
         </div>
       </div>
     </div>
-    <div class="border-t">
+    <div class="border-t mt-[48px]">
       <div class="w-[40%]">
         <q-tabs
           v-model="tab"
@@ -78,12 +78,12 @@
           <q-tab
             class=""
             name="Description"
-            label="Description"
+            label="Mô Tả"
           />
           <q-tab
             class=""
             name="Other"
-            label="Others"
+            label="Thông Tin Khác"
           />
         </q-tabs>
       </div>
@@ -100,16 +100,19 @@
         <q-tab-panel name="Other">
           <div class="text-black py-3 border-b flex justify-between">
             <div class="text-base flex-1">
-              Gurantee
+              Bảo Hành
             </div>
             <div class="flex-1 text-left">
-              {{ product["guarantee"] }} Month<span v-if="product['guarantee'] == 1">s</span>
+              {{ product["guarantee"] }} Tháng<span v-if="product['guarantee'] == 1">s</span>
             </div>
           </div>
         </q-tab-panel>
       </q-tab-panels>
     </div>
     <div class="ml-3">
+      <div class="text-[20px] pt-4 pb-4">
+        Sản Phẩm Liên Quan
+      </div>
       <SlideShow
         v-if="relatedProductList.length != 0"
         v-model="relatedProductSlide"
@@ -127,11 +130,10 @@
           :name="slideIndex"
           class="column no-wrap flex-center w-full h-full !p-0"
         >
-          <div class="flex">
+          <div class="grid grid-cols-4 gap-1">
             <ProductItem
               v-for="productItem in 4"
               v-bind="relatedProductList[productItem + ((slideIndex - 1) * 4) - 1]"
-              class="w-[25%]"
             />
           </div>
         </q-carousel-slide>
@@ -144,7 +146,7 @@
 import { onMounted, ref, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import productRepository from 'api/productRepository';
-import { SLIDE_SHOW_MODE } from 'src/common/enum';
+import { DIALOG_TYPE, SLIDE_SHOW_MODE } from 'src/common/enum';
 import * as Math from 'common/math';
 import SlideShow from 'components/base/SlideShow.vue';
 import ProductItem from 'components/common/ProductItem.vue';
@@ -152,6 +154,10 @@ import cartRepository from 'api/cartRepository';
 // eslint-disable-next-line vue/prefer-import-from-vue
 import { inject } from '@vue/runtime-core'
 import { useMainMenuStore } from 'src/stores/mainMenu';
+import { useDialogStore } from 'src/stores/dialog';
+const dialog = useDialogStore();
+
+
 
 const mainMenuStore = useMainMenuStore();
 
@@ -171,8 +177,17 @@ const addToCart = async () => {
   const result = await cartRepository.addToCart(currentProductId, 1);
   if (!result.payload) {
     router.push("/login");
+    return false
+  }
+  else{
+    await dialog.show({
+        type:DIALOG_TYPE.MESSAGE,
+        header:'Thành Công',
+        message:"Sản Phẩm đã được thêm vào giỏ hàng",
+      });
   }
   mainMenuStore.myCallback();
+  return true;
 }
 
 const getProduct = async (id) => {
@@ -181,18 +196,19 @@ const getProduct = async (id) => {
 }
 
 const getRelatedProduct = async (id) => {
-  const result = await productRepository.getByType(id);
-  relatedProductList.value = result.payload;
+  const result = await productRepository.getByType(id,8,1);
+  relatedProductList.value = result.payload.product;
   relatedProductList.value = relatedProductList.value.slice(0,8);
 }
 
 const buyProduct = async () => {
-  await addToCart();
-  router.push("/cart");
+  let isComplete = await addToCart();
+  if(isComplete){
+    router.push("/cart");
+  }
 }
 
 onMounted(async () => {
-  console.log('onmoun');
   const id = router.currentRoute.value.params.id;
   await getProduct(id);
   getRelatedProduct(product.value["typeId"]);
@@ -200,7 +216,6 @@ onMounted(async () => {
 });
 
 watch(() => route.params.id, async () => {
-  console.log('watch');
   const id = router.currentRoute.value.params.id;
   getProduct(id);
   await getRelatedProduct(product.value["typeId"])

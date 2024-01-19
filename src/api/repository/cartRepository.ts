@@ -29,6 +29,14 @@ class CartRepository extends BaseRepository {
     return this.client.put(`/${cartId}/${status}/${delFlag}`);
   }
 
+  deleteCart(cartId){
+    return this.client.delete(`/${cartId}`);
+  }
+
+  changeSelected(cartId){
+    return this.client.put(`/selected/${cartId}`);
+  }
+
 }
 
 export default new CartRepository();

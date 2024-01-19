@@ -9,14 +9,14 @@
     />
     <div class="block-product">
       <div class="text-center uppercase text-lg font-bold py-[24px]">
-        New Products
+        Sản Phẩm Mới
       </div>
-      <div class="flex mx-[-4px]">
+      <div class="grid grid-cols-4 gap-2">
         <ProductItem
           v-for="(product, index) in newProductList"
           :key="index"
           v-bind="product"
-          class="w-[20%] h-[300px]"
+          class="h-[300px]"
         />
       </div>
     </div>
@@ -24,14 +24,14 @@
       <div class=" text-lg font-bold flex border border-dotted border my-3">
         <div class="mr-[auto] ">
           <span class=" text-white bg-[#8071b3] h-full block p-2 uppercase">
-            Keyboard
+            Bàn Phím
           </span>
         </div>
         <a
           href="/"
           class="ml-[auto] h-full p-2 text-black italic text-[14px] underline cursor-pointer select-none"
         >
-          more detail
+          Xem thêm
         </a>
       </div>
       <div class="mx-[-4px]">
@@ -52,11 +52,12 @@
             :name="slideIndex"
             class="column no-wrap flex-center w-full h-full !p-0"
           >
-            <div class="flex">
+            <div
+              class="grid grid-cols-5 gap-2"
+            >
               <ProductItem
                 v-for="productItem in 5"
                 v-bind="keyboardsList[productItem + ((slideIndex - 1) * 5) - 1]"
-                class="w-[20%]"
               />
             </div>
           </q-carousel-slide>
@@ -65,7 +66,7 @@
     </div>
     <div class="block-product">
       <div class="text-center uppercase text-lg font-bold py-[24px]">
-        Category
+        Phân loại
       </div>
       <div class="flex mx-[-8px]">
         <div
@@ -90,14 +91,14 @@
       <div class=" text-lg font-bold flex border border-dotted my-3">
         <div class="mr-[auto] ">
           <span class=" text-white bg-[#8071b3] h-full block p-2 uppercase">
-            Mouse
+            Chuột
           </span>
         </div>
         <a
           href="/"
           class="ml-[auto] h-full p-2 text-black italic text-[14px] underline cursor-pointer select-none"
         >
-          more detail
+          Xem thêm
         </a>
       </div>
       <div class="mx-[-4px]">
@@ -117,19 +118,49 @@
             :name="slideIndex"
             class="column no-wrap flex-center w-full h-full !p-0"
           >
-            <div class="flex">
+            <div class="grid grid-cols-5 gap-2">
               <ProductItem
                 v-for="productItem in 5"
                 v-bind="mouseList[productItem + ((slideIndex - 1) * 5) - 1]"
-                class="w-[20%]"
               />
             </div>
           </q-carousel-slide>
         </SlideShow>
       </div>
+      <div class="banner">
+        <img
+          src="images/landingPage/akko-cs-switch-725x385-1.jpg"
+          alt=""
+          class="w-full py-7"
+        >
+      </div>
+      <div class=" text-lg font-bold flex border border-dotted my-3">
+        <div class="mr-[auto] ">
+          <span class=" text-white bg-[#8071b3] h-full block p-2 uppercase">
+            Switch
+          </span>
+        </div>
+        <a
+          href="/"
+          class="ml-[auto] h-full p-2 text-black italic text-[14px] underline cursor-pointer select-none"
+        >
+          Xem thêm
+        </a>
+      </div>
+      <div class="block-product">
+        <div class="grid grid-cols-4 gap-2">
+          <ProductItem
+            v-for="(product, index) in switchProduct"
+            :key="index"
+            v-bind="product"
+            class="h-[300px]"
+          />
+        </div>
+      </div>
     </div>
+  
+    <FooterInfo />
   </div>
-  <FooterInfo />
 </template>
 <script setup lang="ts">
 
@@ -142,16 +173,19 @@ import * as Math from 'common/math';
 import productRepository from 'api/productRepository';
 import typeRepository from 'api/typeRepository';
 import FooterInfo from 'subpage/FooterInfo.vue';
+import accountRepository from 'repository/accountRepository';
+
 provide('test2','valuetest2');
 const firstSlide = ref(0);
 const keyboardSlide = ref(1);
 const typeList = ref([]);
+const currentUser = ref();
+const switchProduct = ref([]);
+
 onMounted(async () => {
   // get new product
   const result = await productRepository.getNewProduct();
-  newProductList.value = result.payload.slice(0,10);
-  console.log(result.payload);
-  console.log(newProductList.value);
+  newProductList.value = result.payload.slice(0,8);
 
 
   // get type list
@@ -160,12 +194,13 @@ onMounted(async () => {
 
   // get keyboard list
   // FIX: not fixed type id
-  const keyboardresult = await productRepository.getByType("9ece3d55-2635-48a0-a65b-4f1cd9af95a1");
-  keyboardsList.value = keyboardresult.payload.slice(0,10);
-  const mouseResult = await productRepository.getByType("190c853b-892d-4955-83f3-6c662fd56c9b")
-  mouseList.value = mouseResult.payload.slice(0,10);
-
-
+  const keyboardresult = await productRepository.getByType("9ece3d55-2635-48a0-a65b-4f1cd9af95a1",12,1);
+  keyboardsList.value = keyboardresult.payload.product.slice(0,10);
+  const mouseResult = await productRepository.getByType("190c853b-892d-4955-83f3-6c662fd56c9b",12,1)
+  mouseList.value = mouseResult.payload.product.slice(0,10);
+  // get current user
+  const switchResult = await productRepository.getByType("7aa5445d-dbea-4f57-b9e2-19977e7b0b01",12,1);
+  switchProduct.value=  switchResult.payload.product
 });
 
 const imageToLink = (images) => {
@@ -204,4 +239,8 @@ const mouseList = ref([]);
 
 .product-img:hover>div {
   display: flex !important;
-}</style>src/utils/static-link.js
+}
+</style>
+
+
+

@@ -124,62 +124,6 @@
             <q-btn
               class="!bg-[#8071b3] text-white !w-full !py-3"
               label="Continue"
-              @click="validateLoginMoreInfo"
-            />
-          </div>
-          <div :class="{'hidden':tabNumber!=2}">
-            <div class="absolute top-0 left-0 ml-3 mt-3">
-              <CIcon
-                icon="Arrow Back"
-                class="w-24 !text-[30px] text-center text-[#8071b3]"
-                @click="tabNumber--"
-              />
-            </div>
-            <div class="text-[36px] font-bold text-center text-[#8071b3]">
-              Payment Method
-            </div>
-            <div class="mt-4">
-              <q-input
-                v-model="user.cardHolder"
-                outlined
-                label="card holder"
-                class="py-2"
-                :rules="[val=>val.length > 5 || 'card holder at least contains 5 characters']"
-              />
-              <q-input
-                v-model="user.cardNumber"
-                outlined
-                label="card number"
-                class="py-2"
-                :rules="[val=>val.length > 5 || 'card number at least contains 5 characters']"
-              >
-                <template #append>
-                  <q-avatar>
-                    <img src="/images/login/mc-logo.svg">
-                  </q-avatar>
-                </template>
-              </q-input>
-              <div class="flex !flex-nowrap">
-                <q-input
-                  v-model="user.expireDate"
-                  outlined
-                  type="date"
-                  label="expired date"
-                  class="py-2 pr-[12px] w-full"
-                  :rules='[val => val != "" || "Make sure that you input your card expire date"]'
-                />
-                <q-input
-                  v-model="user.CVC"
-                  outlined
-                  label="CVC"
-                  class="py-2 "
-                  :rules='[val => val != "" || "Make sure that you input CVC"]'
-                />
-              </div>
-            </div>
-            <q-btn
-              class="!bg-[#8071b3] text-white !w-full !py-3"
-              label="Sign In"
               @click="createAccountClickHandler"
             />
           </div>
@@ -249,11 +193,13 @@
   import { DIALOG_TYPE } from 'src/common/enum';
   import { useRoute, useRouter } from 'vue-router';
   import { useCookies } from "vue3-cookies";
+  import { useMainMenuStore } from 'stores/mainMenu';
 
   const route = useRoute();
   const router = useRouter();
   const dialog = useDialogStore();
   const {cookies} = useCookies();
+  const mainMenuStore = useMainMenuStore();
 
   const isLogin = ref(false);
   const tabNumber = ref(0);
@@ -264,10 +210,6 @@
     password:"",
     phone:"",
     location:"",
-    cardHolder:"",
-    cardNumber:"",
-    expireDate:"",
-    CVC:"",
     avatar:""
   });
   
@@ -282,10 +224,6 @@
       password:"",
       phone:"",
       location:"",
-      cardHolder:"",
-      cardNumber:"",
-      expireDate:"",
-      CVC:"",
       avatar:""
     };
   }
@@ -321,12 +259,6 @@
       tabNumber.value++
     }
   }
-  
-  const validateLoginMoreInfo = () =>{
-    if(validatePhoneNumber(user.value.phone) && user.value.name.length > 5 && user.value.location.length > 5){
-      tabNumber.value++;
-    }
-  }
 
   const createAccountClickHandler = async () =>{
     const account = {
@@ -335,26 +267,30 @@
       Name: user.value.name,
       PhoneNumber: user.value.phone,
       Address: user.value.location,
-      CardHolder: user.value.cardHolder,
-      CardNumber:user.value.cardNumber,
-      CardExpiredDate: user.value.expireDate ,
-      CVC: user.value.CVC,
+      Avatar:user.value.avatar
     }
 
     const result = await accountRepository.signUp(account)
     if(result.code === STATUS_CODE.CONFLICT ){
       dialog.show({
         type:DIALOG_TYPE.MESSAGE,
-        header:'Error',
-        message:"Your email and phone number has been signed up",
-      })
+        header:'Lỗi',
+        message:"Sỗ điện thoại hoặc email đã được đăng kí rồi.",
+      },()=>{tabNumber.value = 0; user.value={name:"",
+          email:"",
+          password:"",
+          phone:"",
+          location:"",
+          avatar:""
+        }})
     }
+    
     else{
       dialog.show({
         type:DIALOG_TYPE.MESSAGE,
-        header:"Success",
-        message:"Checking your email to confirm sign up"
-      })
+        header:"Thành Công",
+        message:"Hãy kiểu tra email của bạn, chúng tôi đã gửi mail xác thực."
+      },()=>{isLogin.value = true})
     }
   }
   const loginClickHandler = async() =>{
@@ -365,26 +301,27 @@
     if(result.code === STATUS_CODE.BAD_REQUEST){
       dialog.show({
         type:"message",
-        header:"Error",
-        message: "Your email or password is incorrect"
+        header:"Lỗi",
+        message: "Email hoặc mật khẩu không đúng."
       })
     }
     else if(result.code === STATUS_CODE.UNAUTHOR){
       dialog.show({
         type:"message",
-        header:"Error",
-        message: "Your account hasn't been verify, check out your email"
+        header:"Lỗi",
+        message: "Tài Khoản của bạn chưa được xác thực."
       })
     }
     else if(result.code === STATUS_CODE.OK){
       dialog.show({
         type:"message",
-        header:"Success",
-        message: "Login successfully complete",
+        header:"Thành công",
+        message: "Đăng nhập thành cônng",
       });
       const payload = result.payload;
       cookies.set("token",payload);
       router.push('/');
+      mainMenuStore.getMe();
     }
     isLogin.value = true;
       user.value =  {
@@ -393,10 +330,6 @@
       password:"",
       phone:"",
       location:"",
-      cardHolder:"",
-      cardNumber:"",
-      expireDate:"",
-      CVC:"",
       avatar:""
     };
   }
@@ -408,6 +341,7 @@
       isLogin.value = false;
     }
   })
+
 </script>
 
 <style scoped lang="scss">

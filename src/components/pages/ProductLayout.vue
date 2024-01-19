@@ -2,16 +2,7 @@
   <div class="wrapper">
     <div class="flex justify-between pt-2 pb-2">
       <div class="text-lg text-black">
-        {{ props.breadCrumb }}
-      </div>
-      <div v-if="route.currentRoute.value.meta.showSortBy">
-        <q-select
-          v-model="orderBy"
-          outlined
-          :options="optionOrder"
-          class="w-[240px]"
-          dense
-        />
+        {{ breadcrumb }}
       </div>
     </div>
     <div class="flex !flex-nowrap pb-8">
@@ -26,9 +17,11 @@
 <script setup lang='ts'>
 import SideMenu from 'views/pages/SideMenu.vue';
 import FooterInfo from 'subpage/FooterInfo.vue';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 const route = useRouter();
+const breadcrumb = ref("");
+
 
 const props = defineProps({
   breadCrumb: {
@@ -51,6 +44,16 @@ const optionOrder = [
 
 const orderBy = ref(optionOrder[0]);
 
+onMounted(()=>{
+  
+  const currentRouter = route.currentRoute.value.fullPath;
+  if(currentRouter.includes("product")){
+    breadcrumb.value  = "TRANG CHỦ / SẢN PHẢM";
+    return;
+  }
+  breadcrumb.value = "TRANG CHỦ / THÔNG TIN";
+  
+})
 
 </script>
 <style scoped lang='scss'>
@@ -59,7 +62,6 @@ const orderBy = ref(optionOrder[0]);
   margin-left: auto;
   margin-right: auto;
   padding-top: 24px;
-
   color: var(--main-color);
   /* @apply  */
 }

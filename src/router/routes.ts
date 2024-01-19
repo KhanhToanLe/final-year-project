@@ -6,16 +6,42 @@ import ProductDetail from 'pages/ProductDetail.vue';
 import ProductList from 'pages/ProductList.vue'
 import ProductLayout from 'src/components/pages/ProductLayout.vue';
 import CartPage from 'pages/CartPage.vue';
+import UserDetail from 'pages/UserDetail.vue';
+import ChangePassword from 'pages/ChangePassword.vue';
+import PageNews from 'pages/PageNews.vue';
+import NewsDetail from 'pages/NewsDetail.vue';
+import PaymentAction from 'pages/PaymentAction.vue';
 
 export const routes = [
   {
     path: "/",
-    name: "Home",
+    name: "Trang Chủ",
     component: LandingPage,
     meta: {
       show: true,
       showMainMenu: true,
       showSidebar: false
+    },
+  },
+  {
+    path: "/user",
+    name:"User",
+    component: UserDetail,
+    meta: {
+      showSortBy: false,
+      showMainMenu:true,
+      showSidebar:false
+    },
+  },
+  {
+    path:"/password",
+    name:"changePassword",
+    component:ChangePassword,
+    meta:{
+      show:false,
+      showSortBy:false,
+      showMainMenu:true,
+      showSidebar:false,
     }
   },
   {
@@ -79,7 +105,7 @@ export const routes = [
   },
   {
     path: "/keyboard",
-    name: "Keyboards",
+    name: "Bàn Phím",
     redirect:{
       path:"/product/keyboard",
     },
@@ -89,29 +115,9 @@ export const routes = [
       showSidebar: false
     },
   },
-  // {
-  //   path: "/about",
-  //   name: "About",
-  //   meta: {
-  //     show: true,
-  //     showMainMenu: true,
-  //     showSidebar: false,
-
-  //   }
-  // },
-  // {
-  //   path: "/news",
-  //   name: "News",
-  //   meta: {
-  //     show: true,
-  //     showMainMenu: true,
-  //     showSidebar: false
-  //   }
-  // },
-
   {
     path: "/kit-keyboard",
-    name: "Kit Keyboard",
+    name: "Kit Bàn Phím",
     redirect:{
       path:"/product/kit-keyboard",
     },
@@ -119,12 +125,11 @@ export const routes = [
       show: true,
       showMainMenu: true,
       showSidebar: false
-
     }
   },
   {
     path: "/mouse",
-    name: "Mouse",
+    name: "Chuột",
     redirect:{
       path:"/product/mouse",
     },
@@ -135,15 +140,6 @@ export const routes = [
 
     }
   },
-  // {
-  //   path: "/accessory",
-  //   name: "Accessory",
-  //   meta: {
-  //     show: true,
-  //     showMainMenu: true,
-  //     showSidebar: false
-  //   }
-  // },
   {
     path: "/switch",
     name: "Switch",
@@ -157,34 +153,32 @@ export const routes = [
     }
   },
   {
-    path: "/gear",
-    name: "Gear",
-    redirect:{
-      path:"/product/switch",
-    },
-    meta: {
-      show: true,
-      showMainMenu: true,
-      showSidebar: false
+    path:"/news",
+    name:"Tin Tức",
+    component:PageNews,
+    meta:{
+      show:true,
+      showMainMenu:true,
+      showSidebar:false
+    }
+  },
+  {
+    path:"/payment",
+    name:"Thanh Toán",
+    component:PaymentAction,
+    meta:{
+      show:false,
+      showMainMenu:true,
+      showSidebar:false
     }
   },
   {
     path: "/support",
-    name: "Support",
+    name: "Hỗ Trợ",
     meta: {
       show: true,
       showMainMenu: true,
       showSidebar: false
-    }
-  },
-  {
-    path: "/shop",
-    name: "Shop",
-    meta: {
-      show: true,
-      showMainMenu: false,
-      showSidebar: false
-
     }
   },
   {
@@ -239,6 +233,17 @@ export const routes = [
       showSidebar: false
     },
     component: ProductDetail
+  },
+  {
+    path: "/news-detail/:id",
+    name: "News Detail",
+    show: false,
+    meta: {
+      show: false,
+      showMainMenu: true,
+      showSidebar: false
+    },
+    component: NewsDetail
   },
   {
     name: "Sign Up",

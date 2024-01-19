@@ -6,6 +6,8 @@ export const  useMainMenuStore = defineStore('mainMenu', () => {
   const doFunction = ()=>{
     myCallback();
   }
+
+  const getMe = null; 
   
-  return {  doFunction, myCallback}
+  return {  doFunction, myCallback, getMe}
 })

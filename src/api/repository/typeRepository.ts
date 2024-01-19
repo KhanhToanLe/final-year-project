@@ -29,8 +29,9 @@ class TypeRepository extends BaseRepository {
   }
 
 
-  
-
+  update(type){
+    return this.client.put("/update",type);
+  }
 }
 
 export default new TypeRepository();

@@ -3,10 +3,12 @@ import { ref } from 'vue'
 
 export const useDialogStore = defineStore('dialog', () => {
   const dialog = ref([])
-
-  const show = (dialogObject) => {
+  const callbackFunc = ref(() => {});
+  const show = (dialogObject,callbackFunction=()=>{}) => {
     dialog.value.push(dialogObject)
+    callbackFunc.value = callbackFunction;
   }
+
   const hide = (value?) =>{
     dialog.value.pop();
     return value;
@@ -16,5 +18,5 @@ export const useDialogStore = defineStore('dialog', () => {
     const index = dialog.value.indexOf(theDialog);
     dialog.value.splice(index, 1);
   }
-  return { dialog, show, hide,hideLoading}
+  return { dialog, show, hide, hideLoading,callbackFunc}
 })

@@ -3,8 +3,8 @@
     <div class="font-extrabold text-xl pb-4 flex">
       <div>
         <div class="mb-3">
-          <span v-if="!props.isUpdate">Add Product</span>
-          <span v-else>Update Product</span>
+          <span v-if="!props.isUpdate">Add News</span>
+          <span v-else>Update News</span>
         </div>
         <div class="">
           <q-btn
@@ -34,73 +34,12 @@
     </div>
     <div class="row-input">
       <q-input
-        v-model="product.name"
+        v-model="product.title"
         outlined
-        label="Name"
+        label="title"
         class="w-full"
         dense
       />
-    </div>
-    <div class="row-input">
-      <q-input
-        v-model="product.code"
-        outlined
-        label="Code"
-        class="w-full pr-2"
-        dense
-      />
-      <q-input
-        v-model="product.price"
-        outlined
-        type="number"
-        label="Price"
-        class="w-full"
-        dense
-      />
-    </div>
-    <div class="row-input">
-      <q-input
-        v-model="product.guarantee"
-        outlined
-        label="Guarantee "
-        class="w-full pr-2"
-        dense
-      />
-      <q-input
-        v-model="product.keyword"
-        outlined
-        label="Key word"
-        class="w-full"
-        dense
-      />
-    </div>
-    <div class="row-input">
-      <!-- <q-color
-        v-model="hex"
-        class="my-picker"
-      /> -->
-      <div class="w-full">
-        <div />
-        <q-select
-          v-model="product.type"
-          class="w-full pr-2"
-          outlined
-          dense
-          option-label="name"
-          :options="props.typeList"
-          label="Product Type"
-        />
-      </div>
-      <div class="w-full">
-        <q-input
-          v-model="product.mounts"
-          type="number"
-          class="w-full"
-          outlined
-          dense
-          label="mount"
-        />
-      </div>
     </div>
     <q-btn
       class="mt-2 !bg-[#8071b3] text-white"
@@ -143,7 +82,7 @@
       </h6>
       <EditorPages
         ref="descriptionEditor"
-        v-model="product.description"
+        v-model="product.content"
         placeholder="enter product description..."
       />
     </div>
@@ -158,32 +97,26 @@ import { toBase64 } from 'src/utils/common';
 import EditorPages from 'tools/EditorPages.vue'
 import productRepository from 'repository/productRepository';
 import type {IProduct} from 'interface/ProductInterface'; 
+import newsRepository from 'repository/newsRepository';
 import _ from 'lodash';
+import { useRouter } from 'vue-router';
+const router = useRouter();
 
 const props = defineProps<{
   isUpdate: Boolean,
 
-  updateProduct: IProduct
-  typeList:Array<any>
+  updateProduct
 }>();
 
-const product:Ref<IProduct> = ref({
-  name: '',
-  vietnameseName: "",
-  code: "",
-  price: 0,
-  keyword: "",
-  guarantee: 0,
-  description: "",
-  images: "",
-  type: "",
-  mounts:0
-
+const product = ref({
+  title: '',
+  content: "",
+  images:""
 });
 
 const updateImageHandler = () => {
-  productRepository.update({
-    product: product.value,
+  newsRepository.update({
+    news: product.value,
     Images: allImage.value
   })
 }
@@ -218,30 +151,25 @@ const deleteImage = (file, index) => {
   }
 }
 
-
-
-const saveProductHandler = () => {
+const saveProductHandler = async() => {
   // call api to save
-  const productReq = _.clone(product.value);
+  const productReq = {};
+  productReq.news = {
+    title : product.value.title,
+    content: product.value.content
+  };
 
   productReq.images = productImageList.value;
-  productReq.typeId = productReq.type.id;
-  delete productReq.type;
-  productRepository.add(productReq);
+  console.log(productReq);
+
+  const result = await newsRepository.add(productReq);
   clearProductHandler();
 }
 const clearProductHandler = () => {
   product.value = {
     name: '',
-    vietnameseName: "",
-    code: "",
-    price: 0,
-    keyword: "",
-    guarantee: 0,
     description: "",
-    images: "",
-    type: "",
-    mounts:0
+    images:"",
   };
   productImageList.value = [];
   descriptionEditor.value?.clearText();
@@ -255,14 +183,10 @@ const allImage = computed(() => {
 onMounted(() => {
   if (props.isUpdate) {
     product.value = props.updateProduct;
-    descriptionEditor.value.setText(product.value.description);
+    descriptionEditor.value.setText(product.value.content);
+    console.log(product.value);
     updateImageList.value = product.value["images"].split(",");
-    product.value.type = props.typeList.find((x)=>x.id == product.value.typeId)
-    return;
-    
   }
-  product.value.type = props.typeList[0];
-
 })
 
 </script>

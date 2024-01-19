@@ -13,6 +13,8 @@ import CIcon from 'base/CIcon.vue';
 import { Quasar} from 'quasar'
 import quasarUserOptions from './quasar-user-options'
 const app = createApp(App).use(Quasar, quasarUserOptions)
+// app.config.errorHandler = () => null;
+app.config.warnHandler = () => null;
 
 // config signalR
 const connection = new HubConnectionBuilder()
