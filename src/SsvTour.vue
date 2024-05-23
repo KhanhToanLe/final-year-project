@@ -35,13 +35,13 @@
           class="w-full bg-[#202124] text-[#bdc1c6]"
           key="test"
         >
-          <div class="grid-wrapper grid grid-cols-2 gap-0 w-full ">
+          <div class="grid-wrapper grid grid-cols-2 gap-0 w-full bg-[#202124]">
             <TransitionGroup name="expand">
               <div
                 v-for="(item, index) in data"
                 v-show="item.show"
                 :key="index"
-                class="p-4 flex w-full flex-nowrap bg-[#202124]"
+                class="p-4 flex w-full flex-nowrap bg-[#1f1f1f]"
                 :class="{ 'col-span-2': index == middleMatch }"
               >
                 <template v-if="index != middleMatch">
@@ -91,9 +91,12 @@
                   </div>
                 </template>
                 <template v-else>
-                  <div class="w-full flex p-4 justify-between relative">
-                    <div class="flex-1 pl-32 flex">
-                      <div class="w-fit">
+                  <div
+                    class="w-full flex py-4 justify-between relative"
+                    style="padding-left:calc((100% / 4) - 1rem); padding-right:calc((100% / 4) - 1rem)"
+                  >
+                    <div class="flex-1 flex">
+                      <div class="w-fit translate-x-[-50%]">
                         <img
                           src="https://ssl.gstatic.com/onebox/media/sports/logos/FqnQ9nu7UDiSgnXKohdIgg_48x48.png"
                           alt=""
@@ -105,8 +108,8 @@
                         >Aston Villa</a>
                       </div>
                     </div>
-                    <div class="flex-1 flex justify-end pr-32">
-                      <div class="w-fit">
+                    <div class="flex-1 flex justify-end">
+                      <div class="w-fit translate-x-[50%]">
                         <img
                           src="https://ssl.gstatic.com/onebox/media/sports/logos/0iShHhASp5q1SL4JhtwJiw_96x96.png"
                           alt=""
