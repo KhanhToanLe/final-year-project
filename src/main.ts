@@ -20,7 +20,7 @@ app.config.warnHandler = () => null;
 const connection = new HubConnectionBuilder()
   .withUrl('https://localhost:7082/comment')
   .build();
-app.use(VueSignalR, { connection } as any)
+// app.use(VueSignalR, { connection } as any)
 
 app.use(createPinia())
 app.use(router)
