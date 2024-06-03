@@ -1,9 +1,6 @@
 <template>
-  <div class="w-[800px] ml-[auto] mr-[auto]">
-    <div class="mt-8 sm:mt-28">
-      <h1 class="player-title text-xl">
-        <router-link to="/musics">我的私人音乐坊 &gt;</router-link>
-      </h1>
+  <div class="">
+    <div class="">
       <div class="flex items-center mt-6 flex-col-reverse sm:flex-row">
         <div class="flex-1 w-full">
           <div class="flex items-center h-9 mt-6 sm:mt-0 !justify-start">

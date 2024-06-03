@@ -24,14 +24,6 @@
         fill="#333"
         :onclick="withModifiers(addToLocal, ['stop'])"
       />
-      <Delete
-        v-if="STORAGE.LOCALE === props.currentTab"
-        class="p-2"
-        theme="outline"
-        size="16"
-        fill="#333"
-        :onclick="withModifiers(removeFromLocal, ['stop'])"
-      />
     </div>
   </div>
 </template>

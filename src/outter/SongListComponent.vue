@@ -1,37 +1,6 @@
 <template>
-  <div class="w-[800px] ml-[auto] mr-auto">
+  <div class="">
     <div class="musiclist my-8">
-      <div class="music-header mb-4">
-        <div class="music-tabs">
-          <span
-            :class="{ 'is-active': tabRef == STORAGE.LOCALE }"
-            @click="() => switchTab(STORAGE.LOCALE)"
-          >本地</span>
-          <span
-            :class="['ml-2.5', {
-              'is-active': tabRef === STORAGE.ONLINE
-            }]"
-            @click="() => switchTab(STORAGE.ONLINE)"
-          >在线</span>
-        </div>
-        <span class="music-mode">
-          <ViewGridCard
-            v-if="currentMode === MODE.CARD"
-            theme="outline"
-            size="24"
-            fill="#6b7280"
-            @click="() => switchMode(MODE.LIST)"
-          />
-
-          <ViewGridList
-            v-if="currentMode === MODE.LIST"
-            theme="outline"
-            size="24"
-            fill="#6b7280"
-            @click="() => switchMode(MODE.CARD)"
-          />
-        </span>
-      </div>
       <div class="relative mb-5">
         <div :class="['music-singers', { 'is-expand': isExpand }]">
           <span
@@ -51,15 +20,6 @@
               {{ item.artist }}({{ item.count }})
             </span>
           </template>
-        </div>
-        <div class="music-expand">
-          <expandIcon
-            theme="outline"
-            :size="24"
-            fill="#6b7280"
-            @click="() => switchExpand()"
-          >
-          </expandIcon>
         </div>
       </div>
       <div :class="['music-list', { 'mode-card': currentMode === MODE.CARD }]">
